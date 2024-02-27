@@ -45,7 +45,7 @@
             <!--
         
             -->
-            <li><a href="members.php?page=Edit&userid=<?php $_SESSION['UserID'] ?>">Edit Profile</a></li>
+            <li><a href="members.php?page=Edit&userid=<?php echo $_SESSION['UserID']; ?>">Edit Profile</a></li>
             <li><a href="#">Settings</a></li>
             <li><a href="logout.php">Logout</a></li>
             <li class="divider"></li>
