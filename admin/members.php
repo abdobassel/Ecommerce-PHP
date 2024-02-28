@@ -161,10 +161,16 @@ if (isset($_SESSION['Username'])) {
                 $formError[] = 'fullname is required and more than 4 character ';
             }
 
-            foreach ($formError as $error) {
-                echo $error . '<br>';
-            }
 
+            //   $check = checkItem('Username', 'users', $username);
+            // if ($check == 1) {
+            // $formError[] = 'Username is exists in database ...please change username and try again';
+            //}
+            foreach ($formError as $error) {
+                echo '<br>';
+                echo '<br>';
+                echo '<div class="alert alert-danger">' . $error . ' </div>' . '<br>';
+            }
             if (empty($formError)) {
                 $stmt = $con->prepare("UPDATE users SET Username = ?, Email = ?, Fullname= ?, Password = ? WHERE UserID = ?");
                 $stmt->execute(array($username, $email, $fullname, $password, $userid));
@@ -172,7 +178,9 @@ if (isset($_SESSION['Username'])) {
 
                 echo "<br>";
                 echo "<br>";
-                echo '<div class="alert alert-success">' . 'record is ' . $count . '</div>' . '<br>';
+                // echo '<div class="alert alert-success">' . 'record is ' . $count . '</div>' . '<br>';
+                $msg = '<div class="alert alert-success">' . 'record is ' . $count . '</div>' . '<br>';
+                redirectHome($msg, 'back');
             } else {
                 echo 'No update';
             }
@@ -239,20 +247,29 @@ if (isset($_SESSION['Username'])) {
             if (empty($_POST['password'])) {
                 echo 'error pass is empty';
             } else {
-                $password = sha1($_POST['password']);
-                $stmt = $con->prepare("INSERT INTO users(Username,Password,Fullname,Email)
-            VALUES(:zuser,:zpass,:zfull,:zmail)
-            ");
-                $stmt->execute(array('zuser' => $username, 'zpass' => $password, 'zfull' => $full, 'zmail' => $email));
-                $count = $stmt->rowCount();
+                $chek = checkItem('Username', 'users', $username);
 
-                echo 'record ' . $count;
+                $password = sha1($_POST['password']);
+                if ($chek == 1) {
+                    echo '<br>';
+                    echo '<br>';
+                    echo '<div class="alert alert-danger">' . 'username  is exists in database   </div>' . '<br>';
+                } else {
+                    $stmt = $con->prepare("INSERT INTO users(Username,Password,Fullname,Email)
+                    VALUES(:zuser,:zpass,:zfull,:zmail)
+                    ");
+                    $stmt->execute(array('zuser' => $username, 'zpass' => $password, 'zfull' => $full, 'zmail' => $email));
+                    $count = $stmt->rowCount();
+
+                    echo '<br>';
+                    echo '<div class="alert alert-success">' . 'succsess inserted record is ' . $count . '  </div>' . '<br>';
+                }
             }
         } else {
             echo '<br>';
             echo '<br>';
-            $errorMsg = "sorry You cant browse this page dIRECTLY";
-            redirectHome($errorMsg, 5);
+            $msg =    "<div class='alert alert-danger'> Sorry you can't browse page insert diectly </div>";
+            redirectHome($msg, 'back');
         }
     } elseif ($page == 'Delete') {
         $userid = isset($_GET['userid']) && is_numeric($_GET['userid']) ? intval($_GET['userid']) : 0;
