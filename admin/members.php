@@ -42,7 +42,7 @@ if (isset($_SESSION['Username'])) {
                         echo "<td>" . $row["Username"] . "</td>";
                         echo "<td>" . $row["Email"] . "</td>";
                         echo "<td>" . $row["Fullname"] . "</td>";
-                        echo "<td></td>";
+                        echo "<td>" . $row["Date"] . "</td>";
                         echo "<td>
 					<a href='members.php?page=Edit&userid=" . $row['UserID'] . "' class='btn btn-success'>Edit</a>
 					<a href='members.php?page=Delete&userid=" . $row['UserID'] . "'class='btn btn-danger'>Delete</a>
@@ -180,7 +180,7 @@ if (isset($_SESSION['Username'])) {
                 echo "<br>";
                 // echo '<div class="alert alert-success">' . 'record is ' . $count . '</div>' . '<br>';
                 $msg = '<div class="alert alert-success">' . 'record is ' . $count . '</div>' . '<br>';
-                redirectHome($msg, 'back');
+                redirectHome($msg, 'back'); // back ==> means $url is not null;
             } else {
                 echo 'No update';
             }
@@ -188,8 +188,8 @@ if (isset($_SESSION['Username'])) {
             echo "<br>";
             echo "<br>";
             echo "<br>";
-            $errorMsg = 'You can\'t browse this page update directly ';
-            redirectHome($errorMsg, 4);
+            $msg =    "<div class='alert alert-danger'> Sorry you can't browse page update diectly </div>";
+            redirectHome($msg);
         }
     } elseif ($page == 'Add') { ?>
         <h1 class='text-center'>Add New Member</h1>
@@ -255,14 +255,17 @@ if (isset($_SESSION['Username'])) {
                     echo '<br>';
                     echo '<div class="alert alert-danger">' . 'username  is exists in database   </div>' . '<br>';
                 } else {
-                    $stmt = $con->prepare("INSERT INTO users(Username,Password,Fullname,Email)
-                    VALUES(:zuser,:zpass,:zfull,:zmail)
+                    $stmt = $con->prepare("INSERT INTO users(Username,Password,Fullname,Email, Date)
+                    VALUES(:zuser,:zpass,:zfull,:zmail ,now())
                     ");
                     $stmt->execute(array('zuser' => $username, 'zpass' => $password, 'zfull' => $full, 'zmail' => $email));
                     $count = $stmt->rowCount();
 
                     echo '<br>';
-                    echo '<div class="alert alert-success">' . 'succsess inserted record is ' . $count . '  </div>' . '<br>';
+                    //echo '<div class="alert alert-success">' . 'succsess inserted record is ' . $count . '  </div>' . '<br>';
+                    $msg = '<div class="alert alert-success">' . 'succsess inserted record is ' . $count . '  </div>' . '<br>';
+
+                    redirectHome($msg, 'back');
                 }
             }
         } else {
