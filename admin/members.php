@@ -15,14 +15,53 @@ if (isset($_SESSION['Username'])) {
 
 
     if ($page == "Manage") {
-        echo "manage<br>";
-        echo "manage<br>";
-        echo "manage<br>";
-        echo "manage<br>";
-        echo "manage<br>";
-        echo "manage<br>";
-        echo "manage<br>";
-        echo "<a href='members.php?page=Add'>add memeber<a/>";
+
+
+        $stmt = $con->prepare("SELECT * FROM users WHERE GroupID != 1 ");
+
+        $stmt->execute();
+        $rows = $stmt->fetchAll();
+
+?>
+        <h1 class="text-center">Manage Members</h1>
+        <div class="container">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <tr>
+                        <td>#ID</td>
+                        <td>Username</td>
+                        <td>Email</td>
+                        <td>Fullname</td>
+                        <td>Registred Date</td>
+                        <td>Control</td>
+                    </tr>
+                    <?php
+                    foreach ($rows as $row) {
+                        echo "<tr>";
+                        echo "<td>" . $row["UserID"] . "</td>";
+                        echo "<td>" . $row["Username"] . "</td>";
+                        echo "<td>" . $row["Email"] . "</td>";
+                        echo "<td>" . $row["Fullname"] . "</td>";
+                        echo "<td></td>";
+                        echo "<td>
+					<a href='members.php?page=Edit&userid=" . $row['UserID'] . "' class='btn btn-success'>Edit</a>
+					<a href='members.php?page=Delete&userid=" . $row['UserID'] . "'class='btn btn-danger'>Delete</a>
+					</td>";
+                        echo "</tr>";
+                    }
+
+
+
+                    ?>
+
+                </table>
+            </div>
+            <a href='members.php?page=Add' class="btn btn-primary"><i class="fa fa-plus"></i>Add New Member</a>
+        </div>
+
+        <?php
+
+
     } elseif ($page == 'Edit') {
 
         //start edit page coding...
@@ -42,7 +81,7 @@ if (isset($_SESSION['Username'])) {
 
         if ($count > 0) {
             // form show ...
-?>
+        ?>
             <h1 class='text-center'>Edit Member</h1>
             <div class="container">
                 <form action="?page=Update" method="post"> <!-- page=update => form update  -->
@@ -113,14 +152,36 @@ if (isset($_SESSION['Username'])) {
             } else {
                 $password = sha1($_POST['new-password']);
             }
+            $formError = array();
 
-            $stmt = $con->prepare("UPDATE users SET Username = ?, Email = ?, Fullname= ?, Password = ? WHERE UserID = ?");
-            $stmt->execute(array($username, $email, $fullname, $password, $userid));
-            $count = $stmt->rowCount();
+            if (empty($username) || empty($email) || strlen($username) > 20) {
+                $formError[] = 'username no morethan 20 char and email => required ';
+            }
+            if (empty($fullname) || strlen($fullname) < 4) {
+                $formError[] = 'fullname is required and more than 4 character ';
+            }
 
-            echo ' record is ' . $count . '<br>';
+            foreach ($formError as $error) {
+                echo $error . '<br>';
+            }
+
+            if (empty($formError)) {
+                $stmt = $con->prepare("UPDATE users SET Username = ?, Email = ?, Fullname= ?, Password = ? WHERE UserID = ?");
+                $stmt->execute(array($username, $email, $fullname, $password, $userid));
+                $count = $stmt->rowCount();
+
+                echo "<br>";
+                echo "<br>";
+                echo '<div class="alert alert-success">' . 'record is ' . $count . '</div>' . '<br>';
+            } else {
+                echo 'No update';
+            }
         } else {
-            echo 'no update';
+            echo "<br>";
+            echo "<br>";
+            echo "<br>";
+            $errorMsg = 'You can\'t browse this page update directly ';
+            redirectHome($errorMsg, 4);
         }
     } elseif ($page == 'Add') { ?>
         <h1 class='text-center'>Add New Member</h1>
@@ -190,7 +251,26 @@ if (isset($_SESSION['Username'])) {
         } else {
             echo '<br>';
             echo '<br>';
-            echo "NO DIRECTLY ALLOWOD";
+            $errorMsg = "sorry You cant browse this page dIRECTLY";
+            redirectHome($errorMsg, 5);
+        }
+    } elseif ($page == 'Delete') {
+        $userid = isset($_GET['userid']) && is_numeric($_GET['userid']) ? intval($_GET['userid']) : 0;
+
+        $stmt = $con->prepare("SELECT * FROM users WHERE UserID = ? ");
+        $stmt->execute(array($userid));
+
+        $count = $stmt->rowCount();
+        if ($count > 0) {
+            $stmt = $con->prepare("DELETE  FROM users WHERE UserID = :zuserid ");
+            $stmt->bindParam("zuserid", $userid);
+            $stmt->execute();
+            echo '<div class="alert alert-success">' . 'deleted ' . $count . '</div>' . '<br>';
+            echo '<div class="alert alert-success">' . 'deleted ' . $count . '</div>' . '<br>';
+            echo '<div class="alert alert-success">' . 'deleted ' . $count . '</div>' . '<br>';
+        } else {
+            echo '<div class="alert alert-success">' . 'deleted  not  </div>' . '<br>';
+            echo '<div class="alert alert-success">' . 'deleted  not  </div>' . '<br>';
         }
     } else {
         echo "Error not found page";
