@@ -33,7 +33,7 @@
           <a href="#"><?php echo lang('Statis') ?></a>
         </li>
         <li class="nav navbar-nav">
-          <a href="#"><?php echo lang('Members') ?></a>
+          <a href="members.php"><?php echo lang('Members') ?></a>
         </li>
 
 
