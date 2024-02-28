@@ -35,8 +35,11 @@ if ($page == "Manage") {
 ?>
         <h1 class='text-center'>Edit Member</h1>
         <div class="container">
-            <form action="" method="post">
+            <form action="?page=Update" method="post"> <!-- page=update => form update  -->
                 <div class="form-group form-group-lg">
+                    <input type="hidden" value="<?php
+                                                echo $userid;
+                                                ?>" name="userid">
                     <label class="col-sm2 control-label">Username</label>
                     <div class="col-sm-10">
                         <input type="text" value="<?php
@@ -84,9 +87,23 @@ if ($page == "Manage") {
     } else {
         echo 'you are hacker ):';
     }
-} elseif ($page == 'add') {
+} elseif ($page == 'Update') {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $userid = $_POST['userid'];
+        $username = $_POST['username'];
+        //$password = $_POST['password'];
+        $email = $_POST['email'];
+        $fullname = $_POST['full'];
+        // update sql
 
-    echo "<h1>add<h1/> ";
+        $stmt = $con->prepare("UPDATE users SET Username = ?, Email = ?, Fullname= ? WHERE UserID = ?");
+        $stmt->execute(array($username, $email, $fullname, $userid));
+        $count = $stmt->rowCount();
+
+        echo ' record is ' . $count . '<br>';
+    } else {
+        echo 'no update';
+    }
 } elseif ($page == 'delete') {
 
     echo "<h1>delete<h1/> ";
