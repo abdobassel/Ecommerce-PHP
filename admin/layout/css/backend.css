@@ -16,3 +16,53 @@ body {
 .login .form-control {
     background-color: #e5e5e5;
 }
+
+
+
+
+/* dashboard*/
+.home-stats .stat {
+    background-color: #EEE;
+    border-radius: 10px;
+    padding: 20px;
+    font-size: 20;
+    color: #FFF;
+
+}
+
+.home-stats .st-members {
+    background-color: #f9ca24;
+}
+
+.home-stats .st-items {
+    background-color: #f0932b;
+}
+
+.home-stats .stat a {
+    color: #FFF;
+}
+
+.home-stats .stat a:hover {
+    text-decoration: none;
+    color: aqua;
+}
+
+.home-stats .st-pending {
+    background-color: #eb4d4b;
+}
+
+.home-stats .stat span {
+    display: block;
+    font-size: 50;
+
+}
+
+
+
+.latest {
+    margin-top: 50px;
+}
+
+h1 {
+    font-size: 55;
+}

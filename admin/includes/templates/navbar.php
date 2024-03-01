@@ -23,7 +23,7 @@
 
       <ul class="nav navbar-nav navbar-left">
         <li class="nav navbar-nav">
-          <a href="#"><?php echo lang('Admin_Home') ?></a>
+          <a href="dashboard.php"><?php echo lang('Admin_Home') ?></a>
         </li>
         <li class="nav navbar-nav">
           <a href="#"><?php echo lang('Catego') ?></a>

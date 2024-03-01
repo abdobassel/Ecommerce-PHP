@@ -56,3 +56,16 @@ function checkItem($select, $from, $value)
 
     return $count;
 }
+
+
+// v1.0 check number of items or users example
+
+function countItems($item, $table)
+{
+    global $con;
+
+    $stm = $con->prepare("SELECT COUNT($item) FROM $table");
+    $stm->execute();
+
+    return $stm->fetchColumn();
+}

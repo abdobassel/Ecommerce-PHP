@@ -15,9 +15,13 @@ if (isset($_SESSION['Username'])) {
 
 
     if ($page == "Manage") {
+        $query = '';
+        if (isset($_GET['page2']) &&  $_GET['page2'] == 'Pending') {
+            $query = 'AND RegStatus = 0'; // في حالة بس نه الحالة تساوي صفر هيتم استدعاء فقط اعاء غير مفعلين
 
+        }
 
-        $stmt = $con->prepare("SELECT * FROM users WHERE GroupID != 1 ");
+        $stmt = $con->prepare("SELECT * FROM users WHERE GroupID != 1 $query");
 
         $stmt->execute();
         $rows = $stmt->fetchAll();
@@ -45,8 +49,11 @@ if (isset($_SESSION['Username'])) {
                         echo "<td>" . $row["Date"] . "</td>";
                         echo "<td>
 					<a href='members.php?page=Edit&userid=" . $row['UserID'] . "' class='btn btn-success'>Edit</a>
-					<a href='members.php?page=Delete&userid=" . $row['UserID'] . "'class='btn btn-danger'>Delete</a>
-					</td>";
+					<a href='members.php?page=Delete&userid=" . $row['UserID'] . "'class='btn btn-danger'>Delete</a>";
+                        if ($row['RegStatus'] == 0) {
+                            echo "<a href='members.php?page=Activate&userid=" . $row['UserID'] . "'class='btn btn-info'>Activate</a>";
+                        }
+                        echo "</td>";
                         echo "</tr>";
                     }
 
@@ -253,10 +260,11 @@ if (isset($_SESSION['Username'])) {
                 if ($chek == 1) {
                     echo '<br>';
                     echo '<br>';
-                    echo '<div class="alert alert-danger">' . 'username  is exists in database   </div>' . '<br>';
+                    $msg = '<div class="alert alert-danger">' . 'username  is exists in database   </div>' . '<br>';
+                    redirectHome($msg, 'back', 2);
                 } else {
-                    $stmt = $con->prepare("INSERT INTO users(Username,Password,Fullname,Email, Date)
-                    VALUES(:zuser,:zpass,:zfull,:zmail ,now())
+                    $stmt = $con->prepare("INSERT INTO users(Username,Password,Fullname,Email, RegStatus,Date)
+                    VALUES(:zuser,:zpass,:zfull,:zmail ,1,now())
                     ");
                     $stmt->execute(array('zuser' => $username, 'zpass' => $password, 'zfull' => $full, 'zmail' => $email));
                     $count = $stmt->rowCount();
@@ -277,20 +285,25 @@ if (isset($_SESSION['Username'])) {
     } elseif ($page == 'Delete') {
         $userid = isset($_GET['userid']) && is_numeric($_GET['userid']) ? intval($_GET['userid']) : 0;
 
+        $check = checkItem('userid', 'users', $userid); //
+
+
         $stmt = $con->prepare("SELECT * FROM users WHERE UserID = ? ");
         $stmt->execute(array($userid));
 
         $count = $stmt->rowCount();
-        if ($count > 0) {
+        if ($count > 0 && $check > 0) {
             $stmt = $con->prepare("DELETE  FROM users WHERE UserID = :zuserid ");
             $stmt->bindParam("zuserid", $userid);
             $stmt->execute();
+
             echo '<div class="alert alert-success">' . 'deleted ' . $count . '</div>' . '<br>';
-            echo '<div class="alert alert-success">' . 'deleted ' . $count . '</div>' . '<br>';
-            echo '<div class="alert alert-success">' . 'deleted ' . $count . '</div>' . '<br>';
+            $msg =   '<div class="alert alert-success">' . 'succsess deleted record is ' . $count . '  </div>' . '<br>';
+            redirectHome($msg, 'back');
         } else {
-            echo '<div class="alert alert-success">' . 'deleted  not  </div>' . '<br>';
-            echo '<div class="alert alert-success">' . 'deleted  not  </div>' . '<br>';
+            echo '<div class="alert alert-dange">' . 'deleted  not  </div>' . '<br>';
+            $msg = '<div class="alert alert-danger">' . 'Failed Delete Error because no id exists </div>' . '<br>';
+            redirectHome($msg, 'back');
         }
     } else {
         echo "Error not found page";
