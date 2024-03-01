@@ -305,6 +305,28 @@ if (isset($_SESSION['Username'])) {
             $msg = '<div class="alert alert-danger">' . 'Failed Delete Error because no id exists </div>' . '<br>';
             redirectHome($msg, 'back');
         }
+    } elseif ($page == "Activate") {
+        $userid = isset($_GET['userid']) && is_numeric($_GET['userid']) ? intval($_GET['userid']) : 0;
+
+        $check = checkItem('userid', 'users', $userid); //
+
+
+        $stmt = $con->prepare("SELECT * FROM users WHERE UserID = ? ");
+        $stmt->execute(array($userid));
+
+        $count = $stmt->rowCount();
+        if ($count > 0 && $check > 0) {
+            $stmt = $con->prepare("UPDATE users SET RegStatus = 1  WHERE UserID = ?");
+
+            $stmt->execute(array($userid));
+
+            $msg =   '<div class="alert alert-success">' . 'succsess Activate  </div>' . '<br>';
+            redirectHome($msg, 'back');
+        } else {
+            echo '<div class="alert alert-dange">' . 'deleted  not  </div>' . '<br>';
+            $msg = '<div class="alert alert-danger">' . 'Failed Delete Error because no id exists </div>' . '<br>';
+            redirectHome($msg, 'back');
+        }
     } else {
         echo "Error not found page";
     }

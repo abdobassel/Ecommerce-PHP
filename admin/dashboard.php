@@ -33,7 +33,7 @@ if (isset($_SESSION['Username'])) {
                         Pending Members
                         <span><a href="members.php?page=Manage&page2=Pending"><?php
                                                                                 //  countItems('','');
-                                                                                ?></a>5</span>
+                                                                                ?>5</a></span>
                     </div>
                 </div>
 
