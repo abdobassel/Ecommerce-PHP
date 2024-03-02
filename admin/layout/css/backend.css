@@ -57,11 +57,33 @@ body {
 
 }
 
+.latest-users {
+    margin-bottom: 0px;
 
+}
+
+.latest-users li {
+    padding: 5px 0;
+    overflow: hidden;
+    font-size: 20;
+    font-weight: 600;
+
+}
+
+.latest-users .btn-success {
+    padding: 3px 0;
+
+}
 
 .latest {
     margin-top: 50px;
 }
+
+
+
+
+
+
 
 h1 {
     font-size: 55;

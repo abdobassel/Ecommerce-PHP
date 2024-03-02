@@ -1,5 +1,5 @@
 <?php
-
+ob_start();
 session_start();
 
 
@@ -12,6 +12,10 @@ if (isset($_SESSION['Username'])) {
     //  $stm = $con->prepare("SELECT COUNT(UserID) FROM users");
     //$stm->execute();
 
+    // latest users reg coding
+
+    $latestUsers = getLatest('Fullname,UserID', 'users', 'UserID', 4); // i will do foreach
+
 
     //start dashboard page
 ?> <div class="home-stats">
@@ -23,7 +27,8 @@ if (isset($_SESSION['Username'])) {
                         Total Members
 
                         <span> <?php
-                                echo countItems("UserId", "users");
+                                echo checkItem("GroupId", "users", 0); // now count without admins
+                                // with admins count echo countItems("UserID",'users');
                                 ?></span>
                     </div>
                 </div>
@@ -32,8 +37,10 @@ if (isset($_SESSION['Username'])) {
                     <div class="stat st-pending">
                         Pending Members
                         <span><a href="members.php?page=Manage&page2=Pending"><?php
-                                                                                //  countItems('','');
-                                                                                ?>5</a></span>
+
+                                                                                // number of users unactivate
+                                                                                echo  checkItem('RegStatus', 'users', 0);
+                                                                                ?></a></span>
                     </div>
                 </div>
 
@@ -56,7 +63,24 @@ if (isset($_SESSION['Username'])) {
                             <i class="fa fa-users"></i>Latest users reg
                         </div>
                         <div class="panel-body">
-                            test
+                            <ui class="list-unstyled latest-users">
+
+
+                                <?php
+                                foreach ($latestUsers as $user) {
+                                    echo  "<li>";
+                                    echo $user['Fullname'];
+
+                                    echo '<a href="members.php?page=Edit&userid=' . $user['UserID'] . '">';
+                                    echo '<span class="btn btn-success pull-right">';
+
+                                    echo  '<i class ="fa fa-edit"></i>Edit';
+                                    echo "</span>";
+                                    echo "</a>";
+                                    echo  "</li>";
+                                }
+                                ?>
+                            </ui>
                         </div>
                     </div>
                 </div>
@@ -83,8 +107,10 @@ if (isset($_SESSION['Username'])) {
 <?php
     //end dashboard page
     include $tpl . 'footer.php';
-    print_r($_SESSION);
+    // print_r($_SESSION);
 } else {
     header("Location: index.php");
     exit();
 }
+ob_end_flush();
+?>

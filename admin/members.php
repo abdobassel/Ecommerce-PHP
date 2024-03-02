@@ -319,7 +319,9 @@ if (isset($_SESSION['Username'])) {
             $stmt = $con->prepare("UPDATE users SET RegStatus = 1  WHERE UserID = ?");
 
             $stmt->execute(array($userid));
-
+            echo '<br>';
+            echo '<br>';
+            echo '<br>';
             $msg =   '<div class="alert alert-success">' . 'succsess Activate  </div>' . '<br>';
             redirectHome($msg, 'back');
         } else {

@@ -64,8 +64,26 @@ function countItems($item, $table)
 {
     global $con;
 
+
+
+
+
+
     $stm = $con->prepare("SELECT COUNT($item) FROM $table");
     $stm->execute();
 
     return $stm->fetchColumn();
+}
+
+// latest users
+// gets latest users without admins 
+function getLatest($select, $from, $order, $limit = 5)
+{
+    global $con;
+
+    $stm = $con->prepare("SELECT $select FROM $from WHERE GroupId = 0 ORDER BY $order DESC LIMIT $limit");
+    $stm->execute();
+
+    $rows = $stm->fetchAll();
+    return $rows;
 }
