@@ -14,7 +14,7 @@ if (isset($_SESSION['Username'])) {
 
     // latest users reg coding
 
-    $latestUsers = getLatest('Fullname,UserID', 'users', 'UserID', 4); // i will do foreach
+    $latestUsers = getLatest('Fullname,UserID', 'users', 'UserID', 5); // i will do foreach
 
 
     //start dashboard page
@@ -54,10 +54,12 @@ if (isset($_SESSION['Username'])) {
         </div>
     </div>
 
+    </div>
+
     <div class="latest">
         <div class="container">
             <div class="row">
-                <div class="com-sm-6">
+                <div class="col-sm-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <i class="fa fa-users"></i>Latest users reg
@@ -84,7 +86,7 @@ if (isset($_SESSION['Username'])) {
                         </div>
                     </div>
                 </div>
-                <div class="com-sm-6">
+                <div class="col-sm-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <i class="fa fa-tag"></i>Latest items

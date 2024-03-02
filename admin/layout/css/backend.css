@@ -1,11 +1,46 @@
 /* start main rules */
 body {
     background-color: #f4f4f4;
+    overflow: auto;
     padding-top: 70px;
-    overflow: hidden;
+
 }
 
 
+.navbar {
+    background-color: #333;
+    /* تغيير لون خلفية النافبار */
+    color: #fff;
+    /* تغيير لون النص */
+    height: 60px;
+    /* تعيين ارتفاع النافبار */
+}
+
+.navbar-brand {
+    padding: 15px;
+    /* ضبط المسافة داخل شعار الموقع */
+}
+
+.navbar-nav li {
+    padding: 0 10px;
+    /* ضبط المسافة بين عناصر النافبار */
+
+}
+
+.navbar-nav li a {
+    font-size: 18px;
+    /* تغيير حجم النص */
+    padding: 15px 20px;/
+    /* ضبط المسافة بين عناصر النافبار */
+
+}
+
+@media (max-width: 768px) {
+    .navbar-nav li {
+        padding: 10px 0;
+        /* ضبط المسافة بين عناصر النافبار في الأجهزة الصغيرة */
+    }
+}
 
 /* login */
 .login {

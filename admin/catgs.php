@@ -15,7 +15,17 @@ if (isset($_SESSION['Username'])) {
 
 
     if ($page == "Manage") {
-        $stmt = $con->prepare("SELECT * FROM categories");
+
+        $sort = 'ASC';
+
+        $sorting = array('ASC', 'DESC');
+
+        if (isset($_GET['sort']) && in_array($_GET['sort'], $sorting)) {
+            $sort = $_GET['sort'];
+        }
+
+
+        $stmt = $con->prepare("SELECT * FROM categories ORDER BY Ordering  $sort");
         $stmt->execute();
         $cates =  $stmt->fetchAll();
 
@@ -23,16 +33,74 @@ if (isset($_SESSION['Username'])) {
 
         <h1 class="text-center">Categories Manage</h1>
         <div class="container">
-            <div class="panel panel-default">
-                <div class="panel-heading">Manage categs</div>
+            <div class="latest">
+                <div class="container">
+                    <div class="row">
+                        <div class="com-sm-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    Categories Manage
+                                    <div style="font-size:18px;font-weight:600" class="pull-right">
+                                        Ordering :
+                                        <a style="font-size:16;font-weight:600" href="?sort=ASC">Asc</a>
+
+                                        <a style="font-size:16px;font-weight:600" href="?sort=DESC">Desc</a>
+
+                                    </div>
+
+                                </div>
+                                <div class="panel-body">
+                                    <ui class="list-unstyled latest-users">
 
 
-                <div class="panel-body">
-                    <?php
-                    foreach ($cates as  $cat) {
-                        echo $cat['Name'] . "<br>";
-                    }
-                    ?>
+                                        <?php
+                                        foreach ($cates as $cat) {
+                                            echo  "<li>";
+                                            echo $cat['Name'];
+
+                                            echo '<a href="members.php?page=Edit&catid=' . $cat['Id'] . '">';
+
+                                            echo '<span class="btn btn-success pull-right">';
+
+                                            echo  '<i class ="fa fa-edit"></i>Edit';
+                                            echo "</span>";
+                                            echo "</a>";
+
+                                            echo '<a href="members.php?page=Edit&delete=' . $cat['Id'] . '">';
+
+                                            echo '<span class="btn btn-danger pull-right">';
+
+                                            echo  '<i class ="fa fa-delete"></i>Delete';
+                                            echo "</span>";
+                                            echo "</a>";
+                                            if ($cat['Visibility'] == '1') {
+                                                echo '<a href="members.php?page=Edit&delete=' . $cat['Id'] . '">';
+
+                                                echo '<span class="btn btn-primary pull-right">';
+
+                                                echo  '<i class ="fa fa-delete"></i>Show';
+                                                echo "</span>";
+                                                echo "</a>";
+                                            } else {
+                                                echo '<a href="members.php?page=Edit&delete=' . $cat['Id'] . '">';
+
+                                                echo '<span class="btn btn-warning pull-right">';
+
+                                                echo  '<i class ="fa fa-delete"></i>Hide';
+                                                echo "</span>";
+                                                echo "</a>";
+                                            }
+
+                                            echo  "</li>";
+                                        }
+                                        ?>
+                                    </ui>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
                 </div>
             </div>
 
