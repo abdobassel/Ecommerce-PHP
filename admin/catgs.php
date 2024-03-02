@@ -15,14 +15,36 @@ if (isset($_SESSION['Username'])) {
 
 
     if ($page == "Manage") {
-        echo '<br>';
-        echo 'Welcome catgrs ';
+        $stmt = $con->prepare("SELECT * FROM categories");
+        $stmt->execute();
+        $cates =  $stmt->fetchAll();
+
+?>
+
+        <h1 class="text-center">Categories Manage</h1>
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-heading">Manage categs</div>
+
+
+                <div class="panel-body">
+                    <?php
+                    foreach ($cates as  $cat) {
+                        echo $cat['Name'] . "<br>";
+                    }
+                    ?>
+                </div>
+            </div>
+
+        </div>
+    <?php
+
     } elseif ($page == 'Add') {
         echo '<br>';
         echo '<br>';
         echo 'Welcome Add catgrs ';
         //start coding html    
-?>
+    ?>
 
         <h1 class="text-center">Add New Category</h1>
         <div class="container">

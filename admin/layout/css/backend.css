@@ -1,7 +1,11 @@
 /* start main rules */
 body {
     background-color: #f4f4f4;
+    padding-top: 70px;
+    overflow: hidden;
 }
+
+
 
 /* login */
 .login {
@@ -16,6 +20,7 @@ body {
 .login .form-control {
     background-color: #e5e5e5;
 }
+
 
 
 
