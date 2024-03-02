@@ -103,11 +103,49 @@ if (isset($_SESSION['Username'])) {
 
 <?php
 
-    } elseif ($page == 'Update') {
-        echo '<br>';
-        echo 'Welcome UPDATE catgrs ';
-        echo '<br>';
-        echo 'Welcome ADD catgrs ';
+    } elseif ($page == 'Insert') {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            echo '<br>';
+            echo '<br>';
+            $name = $_POST['name'];
+
+            $description = $_POST['description'];
+            $ordering = $_POST['ordering'];
+
+            $commenting = $_POST['commenting'];
+
+            $ads = $_POST['ads'];
+
+            $visiblity = $_POST['visibility'];
+
+
+            $chek = checkItem('Name', 'categories', $name);
+
+
+            if ($chek == 1 || empty($_POST['name']) == true) {
+                echo '<br>';
+                echo '<br>';
+                $msg = '<div class="alert alert-danger">' . 'category name  is empty or exists in database   </div>' . '<br>';
+                redirectHome($msg, 'back', 2);
+            } else {
+                $stmt = $con->prepare("INSERT INTO categories(Name,	Description,Ordering,Visibility, Alow_Comment,Alow_ads)
+                    VALUES(:zname,:zdesc,:zordering,:zvisible ,:zcomment,:zads)
+                    ");
+                $stmt->execute(array('zname' => $name, 'zdesc' => $description, 'zordering' => $ordering, 'zvisible' => $visiblity, 'zcomment' => $commenting, 'zads' => $ads));
+                $count = $stmt->rowCount();
+
+                echo '<br>';
+                //echo '<div class="alert alert-success">' . 'succsess inserted record is ' . $count . '  </div>' . '<br>';
+                $msg = '<div class="alert alert-success">' . 'succsess inserted category is ' . $count . '  </div>' . '<br>';
+
+                redirectHome($msg, 'back');
+            }
+        } else {
+            echo '<br>';
+            echo '<br>';
+            $msg =    "<div class='alert alert-danger'> Sorry you can't browse page insert diectly </div>";
+            redirectHome($msg, 'back');
+        }
     } elseif ($page == 'Edit') {
         echo '<br>';
         echo 'Welcome Edit catgrs ';
@@ -118,11 +156,11 @@ if (isset($_SESSION['Username'])) {
         echo 'WelcomeDELETE catgrs ';
         echo '<br>';
         echo 'Welcome ADD catgrs ';
-    } elseif ($page == 'Insert') {
+    } elseif ($page == 'Update') {
         echo '<br>';
-        echo 'Welcome INSERT catgrs ';
+        echo 'Welcome Update catgrs ';
         echo '<br>';
-        echo 'Welcome ADD catgrs ';
+        echo 'Welcome Update catgrs ';
     }
     include $tpl . 'footer.php';
 } else {
