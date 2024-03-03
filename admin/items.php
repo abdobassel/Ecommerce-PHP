@@ -1,0 +1,128 @@
+<?php
+ob_start();
+session_start();
+
+
+$pageTitle = '';
+
+
+
+if (isset($_SESSION['Username'])) {
+    include 'init.php';
+
+    $page = isset($_GET['page']) ? $_GET['page'] : "Manage";
+
+
+
+    if ($page == "Manage") {
+        echo 'Welcome Manege Items';
+    } elseif ($page == 'Add') { ?>
+        <h1 class="text-center">Add New Item</h1>
+        <div class="container">
+            <form action="?page=Insert" method="post">
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Item Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="name">
+                    </div>
+                </div>
+                <!-- end Name item -->
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Description</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="desc">
+                    </div>
+                </div>
+                <!-- end Description item -->
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Price </label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="price">
+                    </div>
+                </div>
+                <!-- end Price item -->
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Country Made</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="country">
+                    </div>
+                </div>
+                <!-- end Country made item -->
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Status</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" name="status">
+                            <option value="0">.....</option>
+                            <option value="1">New</option>
+                            <option value="2">Like New</option>
+
+                            <option value="3">Used</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- end Status item -->
+
+
+
+                <div class="form-group row">
+                    <div class="col-sm-10 offset-sm-2">
+                        <input type="submit" value="Save" class="btn btn-primary">
+                    </div>
+                </div>
+            </form>
+    <?php
+    } elseif ($page == 'Insert') {
+
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            echo '<br>';
+            echo '<br>';
+            $name = $_POST['name'];
+
+            $description = $_POST['desc'];
+            $status = $_POST['status'];
+
+            $price = $_POST['price'];
+
+            $country = $_POST['country'];
+
+
+
+
+
+
+
+            $chek = checkItem('Name', 'items', $name);
+            if (empty($_POST['name']) == true || empty($_POST['price']) == true || empty($_POST['country']) == true) {
+                echo '<br>';
+                echo '<br>';
+                $msg = '<div class="alert alert-danger">' . 'name item or price or made is empty </div>' . '<br>';
+                redirectHome($msg, 'back', 2);
+            } else {
+                $stmt = $con->prepare("INSERT INTO items(Name,	Description,Status,Price, Country_Made,Add_Date)
+                        VALUES(:zname,:zdesc,:zstatus,:zprice ,:zmade,now())
+                        ");
+                $stmt->execute(array(
+                    'zname' => $name, 'zdesc' => $description, 'zstatus' => $status, 'zprice' => $price, 'zmade' => $country
+                ));
+                $count = $stmt->rowCount();
+
+                echo '<br>';
+                //echo '<div class="alert alert-success">' . 'succsess inserted record is ' . $count . '  </div>' . '<br>';
+                $msg = '<div class="alert alert-success">' . 'succsessfuly inserted Item  </div>' . '<br>';
+
+                redirectHome($msg, 'back');
+            }
+        }
+    } elseif ($page == 'Edit') {
+    } elseif ($page == 'Update') {
+    } elseif ($page == 'Delete') {
+    } elseif ($page == 'Agree') {
+    }
+    include $tpl . 'footer.php';
+} else {
+    header('Location: index.php');
+    exit();
+}
+ob_end_flush();
