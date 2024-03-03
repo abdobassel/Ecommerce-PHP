@@ -102,6 +102,7 @@ if (isset($_SESSION['Username'])) {
 
                     </div>
                 </div>
+                <a href='catgs.php?page=Add' class="btn btn-primary"><i class="fa fa-plus"></i>Add New Member</a>
             </div>
 
         </div>
@@ -349,10 +350,43 @@ if (isset($_SESSION['Username'])) {
         echo '<br>';
         echo 'Welcome ADD catgrs ';
     } elseif ($page == 'Update') {
-        echo '<br>';
-        echo 'Welcome Update catgrs ';
-        echo '<br>';
-        echo 'Welcome Update catgrs ';
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $id = $_POST['catid'];
+            $name = $_POST['name'];
+
+            $description = $_POST['description'];
+            $ordering = $_POST['ordering'];
+
+            $commenting = $_POST['commenting'];
+
+            $ads = $_POST['ads'];
+
+            $visiblity = $_POST['visibility'];
+
+            $chek = checkItem('Name', 'categories', $name);
+
+
+            if ($chek == 1 || empty($_POST['name']) == true) {
+                echo '<br>';
+                echo '<br>';
+                $msg = '<div class="alert alert-danger">' . 'category name  is empty or exists in database   </div>' . '<br>';
+                redirectHome($msg, 'back', 2);
+            } else {
+                $stmt = $con->prepare("UPDATE categories SET Name = ?, Description = ?, Ordering= ?, Visibility = ?, Alow_Comment=?, Alow_ads = ? WHERE Id = ?");
+                $stmt->execute(array($name, $description, $ordering, $visiblity, $commenting, $ads, $id));
+                $count = $stmt->rowCount();
+
+                echo "<br>";
+                echo "<br>";
+                // echo '<div class="alert alert-success">' . 'record is ' . $count . '</div>' . '<br>';
+                $msg = '<div class="alert alert-success">' . 'Update is Successfuly and Record is ' . $count . '</div>' . '<br>';
+                redirectHome($msg, 'back'); // back ==> means $url is not null;
+            }
+        } else {
+
+            $msg =    "<div class='alert alert-danger'> Sorry you can't browse page update diectly </div>";
+            redirectHome($msg);
+        }
     }
     include $tpl . 'footer.php';
 } else {
