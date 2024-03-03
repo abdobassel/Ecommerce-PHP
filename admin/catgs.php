@@ -58,7 +58,7 @@ if (isset($_SESSION['Username'])) {
                                             echo  "<li>";
                                             echo $cat['Name'];
 
-                                            echo '<a href="members.php?page=Edit&catid=' . $cat['Id'] . '">';
+                                            echo '<a href="catgs.php?page=Edit&catid=' . $cat['Id'] . '">';
 
                                             echo '<span class="btn btn-success pull-right">';
 
@@ -74,7 +74,7 @@ if (isset($_SESSION['Username'])) {
                                             echo "</span>";
                                             echo "</a>";
                                             if ($cat['Visibility'] == '1') {
-                                                echo '<a href="members.php?page=Edit&delete=' . $cat['Id'] . '">';
+                                                echo '<a href="catgs.php?page=Edit&delete=' . $cat['Id'] . '">';
 
                                                 echo '<span class="btn btn-primary pull-right">';
 
@@ -82,7 +82,7 @@ if (isset($_SESSION['Username'])) {
                                                 echo "</span>";
                                                 echo "</a>";
                                             } else {
-                                                echo '<a href="members.php?page=Edit&delete=' . $cat['Id'] . '">';
+                                                echo '<a href="catgs.php?page=Edit&delete=' . $cat['Id'] . '">';
 
                                                 echo '<span class="btn btn-warning pull-right">';
 
@@ -191,7 +191,7 @@ if (isset($_SESSION['Username'])) {
 
 
 
-<?php
+        <?php
 
     } elseif ($page == 'Insert') {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -237,10 +237,112 @@ if (isset($_SESSION['Username'])) {
             redirectHome($msg, 'back');
         }
     } elseif ($page == 'Edit') {
-        echo '<br>';
-        echo 'Welcome Edit catgrs ';
-        echo '<br>';
-        echo 'Welcome Edit catgrs ';
+        $catid = isset($_GET['catid']) && is_numeric($_GET['catid']) ? intval($_GET['catid']) : 0;
+
+        $stmt = $con->prepare("SELECT * FROM categories WHERE Id = ? ");
+        $stmt->execute(array($catid));
+        $row = $stmt->fetch(); // array of info db
+        $count = $stmt->rowCount();
+
+
+
+        if ($count > 0) {
+            // form show ...
+        ?>
+            <h1 class='text-center'>Edit Category</h1>
+            <div class="container">
+                <form action="?page=Update" method="post">
+                    <div class="form-group row">
+                        <input type="hidden" value="<?php echo $catid; ?>" name="catid">
+                        <label class="col-sm-2 col-form-label">Category Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" value="<?php echo $row['Name']; ?>" class="form-control" name="name" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Description</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" value="<?php echo $row['Description']; ?>" name="description">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Ordering</label>
+                        <div class="col-sm-10">
+                            <input type="text" value="<?php echo $row['Ordering']; ?>" class="form-control" name="ordering">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Visible</label>
+                        <div class="col-sm-10">
+                            <div class="form-check">
+                                <input id="vis-yes" type="radio" name="visibility" class="form-check-input" value="0" <?php if ($row['Visibility'] == "0") {
+                                                                                                                            echo 'checked';
+                                                                                                                        } ?> />
+                                <label class="form-check-label" for="vis-yes">Yes</label>
+                            </div>
+                            <div class="form-check">
+                                <input id="vis-no" type="radio" name="visibility" class="form-check-input" value="1" <?php if ($row['Visibility'] == "1") {
+                                                                                                                            echo 'checked';
+                                                                                                                        } ?> />
+                                <label class="form-check-label" for="vis-no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Allow Commenting</label>
+                        <div class="col-sm-10">
+                            <div class="form-check">
+                                <input id="com-yes" type="radio" name="commenting" class="form-check-input" value="0" <?php if ($row['Alow_Comment'] == "0") {
+                                                                                                                            echo 'checked';
+                                                                                                                        } ?> />
+                                <label class="form-check-label" for="com-yes">Yes</label>
+                            </div>
+                            <div class="form-check">
+                                <input id="com-no" type="radio" name="commenting" class="form-check-input" value="1" <?php if ($row['Alow_Comment'] == "1") {
+                                                                                                                            echo 'checked';
+                                                                                                                        } ?> />
+                                <label class="form-check-label" for="com-no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Allow Ads</label>
+                        <div class="col-sm-10">
+                            <div class="form-check">
+                                <input id="ads-yes" type="radio" name="ads" class="form-check-input" value="0" <?php if ($row['Alow_ads'] == "0") {
+                                                                                                                    echo 'checked';
+                                                                                                                } ?> />
+                                <label class="form-check-label" for="ads-yes">Yes</label>
+                            </div>
+                            <div class="form-check">
+                                <input id="ads-no" type="radio" name="ads" class="form-check-input" value="1" <?php if ($row['Alow_ads'] == "1") {
+                                                                                                                    echo 'checked';
+                                                                                                                } ?> />
+                                <label class="form-check-label" for="ads-no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <input type="submit" value="Save" class="btn btn-primary">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+
+<?php
+
+        } else {
+            echo 'you are hacker ):';
+        }
     } elseif ($page == 'Delete') {
         echo '<br>';
         echo 'WelcomeDELETE catgrs ';
