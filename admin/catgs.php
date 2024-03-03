@@ -66,7 +66,7 @@ if (isset($_SESSION['Username'])) {
                                             echo "</span>";
                                             echo "</a>";
 
-                                            echo '<a href="members.php?page=Edit&delete=' . $cat['Id'] . '">';
+                                            echo '<a href="catgs.php?page=Delete&catid=' . $cat['Id'] . '">';
 
                                             echo '<span class="btn btn-danger pull-right">';
 
@@ -74,7 +74,7 @@ if (isset($_SESSION['Username'])) {
                                             echo "</span>";
                                             echo "</a>";
                                             if ($cat['Visibility'] == '1') {
-                                                echo '<a href="catgs.php?page=Edit&delete=' . $cat['Id'] . '">';
+                                                echo '<a href="catgs.php?page=' . $cat['Id'] . '">';
 
                                                 echo '<span class="btn btn-primary pull-right">';
 
@@ -102,7 +102,7 @@ if (isset($_SESSION['Username'])) {
 
                     </div>
                 </div>
-                <a href='catgs.php?page=Add' class="btn btn-primary"><i class="fa fa-plus"></i>Add New Member</a>
+                <a href='catgs.php?page=Add' class="btn btn-danger"><i class="fa fa-plus"></i>Add New Category</a>
             </div>
 
         </div>
@@ -342,13 +342,31 @@ if (isset($_SESSION['Username'])) {
 <?php
 
         } else {
-            echo 'you are hacker ):';
+            $msg = '<div class="alert alert-danger"> Sorry Not Allowed Directly Browsing </div>' . '<br>';
+            redirectHome($msg); // back ==> means $url is not null;
         }
     } elseif ($page == 'Delete') {
-        echo '<br>';
-        echo 'WelcomeDELETE catgrs ';
-        echo '<br>';
-        echo 'Welcome ADD catgrs ';
+        $catid = isset($_GET['catid']) && is_numeric($_GET['catid']) ? intval($_GET['catid']) : 0;
+
+        $check = checkItem('Id', 'categories', $catid); //
+
+
+
+
+
+        if ($check > 0) {
+            $stmt = $con->prepare("DELETE FROM categories WHERE Id = :zcatid");
+            $stmt->bindParam(":zcatid", $catid);
+            $stmt->execute();
+
+
+            $msg =   '<div class="alert alert-success"> Category Is Deleted Success  </div>' . '<br>';
+            redirectHome($msg, 'back');
+        } else {
+            echo '<div class="alert alert-dange">' . 'deleted  not  </div>' . '<br>';
+            $msg = '<div class="alert alert-danger">' . 'Failed Delete Error because no id exists </div>' . '<br>';
+            redirectHome($msg, 'back');
+        }
     } elseif ($page == 'Update') {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $id = $_POST['catid'];
@@ -366,10 +384,10 @@ if (isset($_SESSION['Username'])) {
             $chek = checkItem('Name', 'categories', $name);
 
 
-            if ($chek == 1 || empty($_POST['name']) == true) {
+            if (empty($_POST['name']) == true) {
                 echo '<br>';
                 echo '<br>';
-                $msg = '<div class="alert alert-danger">' . 'category name  is empty or exists in database   </div>' . '<br>';
+                $msg = '<div class="alert alert-danger">' . 'category name is empty   </div>' . '<br>';
                 redirectHome($msg, 'back', 2);
             } else {
                 $stmt = $con->prepare("UPDATE categories SET Name = ?, Description = ?, Ordering= ?, Visibility = ?, Alow_Comment=?, Alow_ads = ? WHERE Id = ?");
