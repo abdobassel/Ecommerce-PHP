@@ -87,3 +87,14 @@ function getLatest($select, $from, $order, $limit = 5)
     $rows = $stm->fetchAll();
     return $rows;
 }
+
+function getLatestItems($select, $from, $order, $limit = 5)
+{
+    global $con;
+
+    $stm = $con->prepare("SELECT $select FROM $from ORDER BY $order DESC LIMIT $limit");
+    $stm->execute();
+
+    $rows = $stm->fetchAll();
+    return $rows;
+}
