@@ -15,7 +15,11 @@ if (isset($_SESSION['Username'])) {
 
 
     if ($page == "Manage") {
-        $stmt = $con->prepare("SELECT * FROM items");
+        $stmt = $con->prepare("SELECT `items`.*,
+         categories.Name AS cat_name ,users.Username FROM items 
+         INNER JOIN categories ON categories.Id = items.Cat_Id 
+         INNER JOIN users ON users.UserID = items.Mem_ID;
+        ");
 
         $stmt->execute();
         $items = $stmt->fetchAll();
@@ -30,6 +34,8 @@ if (isset($_SESSION['Username'])) {
                         <td>Name</td>
                         <td>Description</td>
                         <td>Price</td>
+                        <td>Category</td>
+                        <td>Username</td>
                         <td>Adding Date</td>
                         <td>Control</td>
                     </tr>
@@ -40,7 +46,11 @@ if (isset($_SESSION['Username'])) {
                         echo "<td>" . $item["Name"] . "</td>";
                         echo "<td>" . $item["Description"] . "</td>";
                         echo "<td>" . $item["Price"] . "</td>";
+                        echo "<td>" . $item["cat_name"] . "</td>";
+                        echo "<td>" . $item["Username"] . "</td>";
                         echo "<td>" . $item["Add_Date"] . "</td>";
+
+
                         echo "<td>
 					<a href='items.php?page=Edit&itemid=" . $item['Item_Id'] . "' class='btn btn-success'>Edit</a>
 					<a href='items.php?page=Delete&itemid=" . $item['Item_Id'] . "'class='btn btn-danger'>Delete</a>";
