@@ -163,7 +163,7 @@ if (isset($_SESSION['Username'])) {
             </form>
         </div>
 
-<?php
+        <?php
     } elseif ($page == 'Insert') {
 
 
@@ -214,6 +214,128 @@ if (isset($_SESSION['Username'])) {
             redirectHome($msg, 'back');
         }
     } elseif ($page == 'Edit') {
+
+        $itemid = isset($_GET['itemid']) && is_numeric($_GET['itemid']) ? intval($_GET['itemid']) : 0;
+
+        $stmt = $con->prepare("SELECT * FROM items WHERE Item_Id = ? ");
+        $stmt->execute(array($itemid));
+        $item = $stmt->fetch(); // array of info db
+        $count = $stmt->rowCount();
+
+        if ($count > 0) {
+        ?>
+            <h1 class="text-center">Edit Item</h1>
+            <div class="container">
+                <form action="?page=Update" method="post">
+                    <div class="form-group row">
+                        <input type="hidden" class="form-control" name="itemid" value="<?php echo $item['Item_Id'] ?>">
+                        <label class="col-sm-2 col-form-label">Item Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="name" value="<?php echo $item['Name'] ?>">
+                        </div>
+                    </div>
+                    <!-- end Name item -->
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Description</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="desc" value="<?php echo $item['Description'] ?>">
+
+                        </div>
+                    </div>
+                    <!-- end Description item -->
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Price </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="price" value="<?php echo $item['Price'] ?>">
+                        </div>
+                    </div>
+                    <!-- end Price item -->
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Country Made</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="country" value="<?php echo $item['Country_Made'] ?>">
+                        </div>
+                    </div>
+                    <!-- end Country made item -->
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Status</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" name="status" value="<?php echo $item['Status'] ?>">
+
+                                <option value="1" <?php if ($item['Status'] == '1') {
+                                                        echo 'selected';
+                                                    } ?>>New</option>
+                                <option value="2" <?php if ($item['Status'] == '2') {
+                                                        echo 'selected';
+                                                    } ?>>Like New</option>
+
+                                <option value="3" <?php if ($item['Status'] == '3') {
+                                                        echo 'selected';
+                                                    } ?>>Used</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- end Status item -->
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Category</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" name="categor">
+
+                                <?php
+                                $stms = $con->prepare("SELECT * FROM categories");
+                                $stms->execute();
+                                $catgs =   $stms->fetchAll();
+                                foreach ($catgs as $cat) {
+                                    echo '<option value="' . $cat['Id']  . '"';
+                                    if ($cat['Id'] == $item['Cat_Id']) {
+                                        echo 'selected';
+                                    }
+                                    echo '>' . $cat['Name'] . '</option>';
+                                }
+
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- end Category item -->
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Members</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" name="member" value="<?php echo $item['Mem_ID'] ?>">
+
+                                <?php
+                                $stms = $con->prepare("SELECT * FROM users WHERE GroupId = 0"); // without admins
+                                $stms->execute();
+                                $users =   $stms->fetchAll();
+                                foreach ($users as $user) {
+                                    echo '<option value="' . $user['UserID']  . '"';
+                                    if ($user['UserID'] == $item['Mem_ID']) {
+                                        echo 'selected';
+                                    }
+                                    echo '>' . $user['Fullname'] . '</option>';
+                                }
+
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- end Members  -->
+
+
+
+
+                    <div class="form-group row">
+                        <div class="col-sm-10 offset-sm-2">
+                            <input type="submit" value="Save" class="btn btn-primary">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+<?php
+
+        }
     } elseif ($page == 'Update') {
     } elseif ($page == 'Delete') {
     } elseif ($page == 'Agree') {
@@ -223,4 +345,5 @@ if (isset($_SESSION['Username'])) {
     header('Location: index.php');
     exit();
 }
+
 ob_end_flush();
