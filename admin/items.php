@@ -15,7 +15,50 @@ if (isset($_SESSION['Username'])) {
 
 
     if ($page == "Manage") {
-        echo 'Welcome Manege Items';
+        $stmt = $con->prepare("SELECT * FROM items");
+
+        $stmt->execute();
+        $items = $stmt->fetchAll();
+
+?>
+        <h1 class="text-center">Manage Items</h1>
+        <div class="container">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <tr>
+                        <td>#ID</td>
+                        <td>Name</td>
+                        <td>Description</td>
+                        <td>Price</td>
+                        <td>Adding Date</td>
+                        <td>Control</td>
+                    </tr>
+                    <?php
+                    foreach ($items as $item) {
+                        echo "<tr>";
+                        echo "<td>" . $item["Item_Id"] . "</td>";
+                        echo "<td>" . $item["Name"] . "</td>";
+                        echo "<td>" . $item["Description"] . "</td>";
+                        echo "<td>" . $item["Price"] . "</td>";
+                        echo "<td>" . $item["Add_Date"] . "</td>";
+                        echo "<td>
+					<a href='items.php?page=Edit&itemid=" . $item['Item_Id'] . "' class='btn btn-success'>Edit</a>
+					<a href='items.php?page=Delete&itemid=" . $item['Item_Id'] . "'class='btn btn-danger'>Delete</a>";
+
+                        echo "</td>";
+                        echo "</tr>";
+                    }
+
+
+
+                    ?>
+
+                </table>
+            </div>
+            <a href='items.php?page=Add' class="btn btn-primary"><i class="fa fa-plus"></i>Add New Member</a>
+        </div>
+
+    <?php
     } elseif ($page == 'Add') { ?>
         <h1 class="text-center">Add New Item</h1>
         <div class="container">
@@ -62,6 +105,43 @@ if (isset($_SESSION['Username'])) {
                     </div>
                 </div>
                 <!-- end Status item -->
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Category</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" name="category">
+                            <option value="0">.....</option>
+                            <?php
+                            $stms = $con->prepare("SELECT * FROM categories");
+                            $stms->execute();
+                            $catgs =   $stms->fetchAll();
+                            foreach ($catgs as $cat) {
+                                echo '<option value="' . $cat['Id']  . '">' . $cat['Name'] . '</option>';
+                            }
+
+                            ?>
+                        </select>
+                    </div>
+                </div>
+                <!-- end Category item -->
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Members</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" name="member">
+                            <option value="0">.....</option>
+                            <?php
+                            $stms = $con->prepare("SELECT * FROM users WHERE GroupId = 0"); // without admins
+                            $stms->execute();
+                            $users =   $stms->fetchAll();
+                            foreach ($users as $user) {
+                                echo '<option value="' . $user['UserID']  . '">' . $user['Username'] . '</option>';
+                            }
+
+                            ?>
+                        </select>
+                    </div>
+                </div>
+                <!-- end Members  -->
+
 
 
 
@@ -71,7 +151,9 @@ if (isset($_SESSION['Username'])) {
                     </div>
                 </div>
             </form>
-    <?php
+        </div>
+
+<?php
     } elseif ($page == 'Insert') {
 
 
@@ -86,25 +168,28 @@ if (isset($_SESSION['Username'])) {
             $price = $_POST['price'];
 
             $country = $_POST['country'];
+            $category = $_POST['category'];
+
+            $member = $_POST['member'];
 
 
 
 
 
-
+            // Cat_Id //Mem_ID
 
             $chek = checkItem('Name', 'items', $name);
             if (empty($_POST['name']) == true || empty($_POST['price']) == true || empty($_POST['country']) == true) {
                 echo '<br>';
                 echo '<br>';
-                $msg = '<div class="alert alert-danger">' . 'name item or price or made is empty </div>' . '<br>';
+                $msg = '<div class="alert alert-danger">' . 'name or price or country made => empty </div>' . '<br>';
                 redirectHome($msg, 'back', 2);
             } else {
-                $stmt = $con->prepare("INSERT INTO items(Name,	Description,Status,Price, Country_Made,Add_Date)
-                        VALUES(:zname,:zdesc,:zstatus,:zprice ,:zmade,now())
+                $stmt = $con->prepare("INSERT INTO items(Name,	Description,Status,Price, Country_Made,Cat_Id, Mem_ID,Add_Date)
+                        VALUES(:zname,:zdesc,:zstatus,:zprice ,:zmade,:zcat,:zmem, now())
                         ");
                 $stmt->execute(array(
-                    'zname' => $name, 'zdesc' => $description, 'zstatus' => $status, 'zprice' => $price, 'zmade' => $country
+                    'zname' => $name, 'zdesc' => $description, 'zstatus' => $status, 'zprice' => $price, 'zmade' => $country, 'zcat' => $category, 'zmem' => $member
                 ));
                 $count = $stmt->rowCount();
 
@@ -114,6 +199,9 @@ if (isset($_SESSION['Username'])) {
 
                 redirectHome($msg, 'back');
             }
+        } else {
+            $msg =    "<div class='alert alert-danger'> Sorry you can't browse page insert diectly </div>";
+            redirectHome($msg, 'back');
         }
     } elseif ($page == 'Edit') {
     } elseif ($page == 'Update') {
