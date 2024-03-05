@@ -10,7 +10,6 @@ session_start();
 $pageTitle = 'Comments';
 
 
-
 if (isset($_SESSION['Username'])) {
     include 'init.php';
     $page = isset($_GET['page']) ? $_GET['page'] : "Manage";
@@ -29,6 +28,7 @@ if (isset($_SESSION['Username'])) {
 
         $stmt->execute();
         $rows = $stmt->fetchAll();
+
 
 ?>
         <h1 class="text-center">Manage Comments</h1>
@@ -52,10 +52,10 @@ if (isset($_SESSION['Username'])) {
                         echo "<td>" . $row["item_name"] . "</td>";
                         echo "<td>" . $row["date"] . "</td>";
                         echo "<td>
-					<a href='members.php?page=Edit&comid=" . $row['comment_id'] . "' class='btn btn-success'>Edit</a>
-					<a href='members.php?page=Delete&comid=" . $row['comment_id'] . "'class='btn btn-danger'>Delete</a>";
+					<a href='comments.php?page=Edit&comid=" . $row['comment_id'] . "' class='btn btn-success'>Edit</a>
+					<a href='comments.php?page=Delete&comid=" . $row['comment_id'] . "'class='btn btn-danger'>Delete</a>";
                         if ($row['Approve'] == 0) {
-                            echo "<a href='members.php?page=Approve&comid=" . $row['comment_id'] . "'class='btn btn-info'>Approve</a>";
+                            echo "<a href='comments.php?page=Approve&comid=" . $row['comment_id'] . "'class='btn btn-info'>Approve</a>";
                         }
                         echo "</td>";
                         echo "</tr>";
@@ -203,22 +203,23 @@ if (isset($_SESSION['Username'])) {
             redirectHome($msg);
         }
     } elseif ($page == 'Delete') {
-        $userid = isset($_GET['userid']) && is_numeric($_GET['userid']) ? intval($_GET['userid']) : 0;
+        $comment_id = isset($_GET['comid']) && is_numeric($_GET['comid']) ? intval($_GET['comid']) : 0;
 
-        $check = checkItem('userid', 'users', $userid); //
+        $check = checkItem('comment_id', 'comments', $comment_id); //
 
 
-        $stmt = $con->prepare("SELECT * FROM users WHERE UserID = ? ");
-        $stmt->execute(array($userid));
+        //  $stmt = $con->prepare("SELECT * FROM users WHERE UserID = ? ");
+        //  $stmt->execute(array($userid));
 
-        $count = $stmt->rowCount();
-        if ($count > 0 && $check > 0) {
-            $stmt = $con->prepare("DELETE  FROM users WHERE UserID = :zuserid ");
-            $stmt->bindParam("zuserid", $userid);
+        // $count = $stmt->rowCount();
+        if ($check > 0) {
+            $stmt = $con->prepare("DELETE FROM comments WHERE comment_id = :zcomid");
+            $stmt->bindParam(":zcomid", $comment_id);
             $stmt->execute();
 
-            echo '<div class="alert alert-success">' . 'deleted ' . $count . '</div>' . '<br>';
-            $msg =   '<div class="alert alert-success">' . 'succsess deleted record is ' . $count . '  </div>' . '<br>';
+
+            // echo '<div class="alert alert-success">' . 'deleted Comments success</div>' . '<br>';
+            $msg =   '<div class="alert alert-success">' . 'deleted Comments success</div>' . '<br>';
             redirectHome($msg, 'back');
         } else {
             echo '<div class="alert alert-dange">' . 'deleted  not  </div>' . '<br>';
