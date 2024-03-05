@@ -30,15 +30,30 @@ body {
 .navbar-nav li a {
     font-size: 18px;
     /* تغيير حجم النص */
-    padding: 15px 20px;/
+    padding: 15px 20px;
     /* ضبط المسافة بين عناصر النافبار */
 
 }
 
 @media (max-width: 768px) {
-    .navbar-nav li {
+    .navbar li {
         padding: 10px 0;
-        /* ضبط المسافة بين عناصر النافبار في الأجهزة الصغيرة */
+    }
+}
+
+@media (max-width: 900px) {
+    .navbar li {
+        padding: 10px 0;
+    }
+
+    .navbar {
+        height: 100px;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        height: 100px;
     }
 }
 
@@ -74,8 +89,14 @@ body {
     background-color: #f9ca24;
 }
 
+
+
 .home-stats .st-items {
     background-color: #f0932b;
+}
+
+.home-stats .st-comments {
+    background-color: #033945;
 }
 
 .home-stats .stat a {

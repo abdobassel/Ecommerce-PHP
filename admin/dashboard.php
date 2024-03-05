@@ -33,6 +33,16 @@ if (isset($_SESSION['Username'])) {
                                                         ?></a></span>
                     </div>
                 </div>
+                <div class="col-md-3">
+                    <div class="stat st-comments">
+                        Total Comments
+
+                        <span> <a href="comments.php"><?php
+                                                        echo countItems("comment_id", "comments"); // now count without admins
+                                                        // with admins count echo countItems("UserID",'users');
+                                                        ?></a></span>
+                    </div>
+                </div>
 
                 <div class="col-md-3">
                     <div class="stat st-pending">

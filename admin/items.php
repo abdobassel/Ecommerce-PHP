@@ -331,7 +331,70 @@ if (isset($_SESSION['Username'])) {
                         </div>
                     </div>
                 </form>
+                <?php // end Form Item Idet 
+                // Statrt Comments => for this item only
+
+                $stmt = $con->prepare("  SELECT comments.*, users.Username FROM comments 
+                                            INNER JOIN users ON users.UserID = comments.user_id
+                                            WHERE comments.item_id = ?");
+
+                $stmt->execute(array($itemid));
+                $rows = $stmt->fetchAll();
+                if (!empty($rows)) {
+                ?>
+
+
+
+
+                    <h1 class="text-center">Manage [ <?php echo $item['Name']; ?> ] Comments</h1>
+                    <div class="container">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <tr>
+
+                                    <td>Comment</td>
+                                    <td>Username</td>
+
+                                    <td>Comment Date</td>
+                                    <td>Control</td>
+                                </tr>
+                                <?php
+                                foreach ($rows as $row) {
+                                    echo "<tr>";
+
+                                    echo "<td>" . $row["body"] . "</td>";
+                                    echo "<td>" . $row["Username"] . "</td>";
+
+                                    echo "<td>" . $row["date"] . "</td>";
+                                    echo "<td>
+					<a href='comments.php?page=Edit&comid=" . $row['comment_id'] . "' class='btn btn-success'>Edit</a>
+					<a href='comments.php?page=Delete&comid=" . $row['comment_id'] . "'class='btn btn-danger'>Delete</a>";
+                                    if ($row['Approve'] == 0) {
+                                        echo "<a href='comments.php?page=Approve&comid=" . $row['comment_id'] . "'class='btn btn-info'>Approve</a>";
+                                    }
+                                    echo "</td>";
+                                    echo "</tr>";
+                                }
+
+
+
+                                ?>
+
+                            </table>
+                        </div>
+                    <?php
+                } else {
+                    echo '<div class="container text-center"';
+                    echo "<h1>No Comments</h1> ";
+                    echo "</div>";
+                }
+                    ?>
+                    </div>
+
             </div>
+
+
+
 
 <?php
 

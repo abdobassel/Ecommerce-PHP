@@ -285,7 +285,7 @@ if (isset($_SESSION['Username'])) {
     } elseif ($page == 'Delete') {
         $userid = isset($_GET['userid']) && is_numeric($_GET['userid']) ? intval($_GET['userid']) : 0;
 
-        $check = checkItem('userid', 'users', $userid); //
+        $check = checkItem('UserID', 'users', $userid); //
 
 
         $stmt = $con->prepare("SELECT * FROM users WHERE UserID = ? ");
