@@ -139,6 +139,90 @@ if (isset($_SESSION['Username'])) {
                 </div>
 
             </div>
+            <!-- start comments-->
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-comment"></i>Comments...
+                        </div>
+                        <div class="panel-body">
+                            <ui class="list-unstyled latest-users">
+
+
+                                <?php
+                                $stmt = $con->prepare(" SELECT comments.*, users.Username , items.Name AS item_name
+                                  FROM comments 
+                                  INNER JOIN users ON users.UserID = comments.user_id
+                                  INNER JOIN items ON items.Item_Id = comments.item_id
+                                
+                                  ");
+
+                                $stmt->execute();
+                                $comments = $stmt->fetchAll();
+
+                                foreach ($comments as $comment) {
+                                    echo "<li>";
+                                    echo 'New Comment from [ ' . '<a href="members.php?page=Edit&userid=' . $comment['user_id'] . '">'
+
+                                        . $comment['Username'] . '</a>' .
+
+                                        ' ] On [ ' . '<a href="items.php?page=Edit&itemid=' . $comment['item_id'] . '">'
+                                        . $comment['item_name'];
+                                    echo '</a>' . ' ]';
+                                    echo '<br>';
+
+                                    echo '<a href="comments.php?page=Edit&comid=' . $comment['comment_id'] . '">';
+
+                                    echo '<span>'  . $comment['body'] . '</span>';
+                                    echo "</a>";
+                                    echo "</li>";
+                                }
+                                ?>
+                            </ui>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-tag"></i>Latest items
+                        </div>
+                        <div class="panel-body">
+                            <ui class="list-unstyled latest-users">
+
+
+                                <?php
+                                foreach ($latest_Items as $item) {
+                                    echo  "<li>";
+                                    echo $item['Name'];
+
+                                    echo '<a href="items.php?page=Edit&itemid=' . $item['Item_Id'] . '">';
+                                    echo '<span class="btn btn-success pull-right">';
+
+                                    echo  '<i class ="fa fa-edit"></i>Edit';
+                                    echo "</span>";
+                                    echo "</a>";
+
+
+                                    if ($item['Approve'] == '0') {
+                                        echo '<a href="items.php?page=Approve&itemid=' . $item['Item_Id'] . '">';
+
+                                        echo '<span class="btn btn-primary pull-right">';
+
+                                        echo  '<i class ="fa fa-check"></i>Approve';
+                                        echo "</span>";
+                                        echo "</a>";
+                                    }
+                                    echo  "</li>";
+                                }
+                                ?>
+                            </ui>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 
