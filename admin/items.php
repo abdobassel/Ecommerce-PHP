@@ -338,7 +338,25 @@ if (isset($_SESSION['Username'])) {
         }
     } elseif ($page == 'Update') {
     } elseif ($page == 'Delete') {
-    } elseif ($page == 'Agree') {
+    } elseif ($page == 'Approve') {
+        $itemid = isset($_GET['itemid']) && is_numeric($_GET['itemid']) ? intval($_GET['itemid']) : 0;
+        $check = checkItem('Item_Id', 'items', $itemid); //
+        // $stmt = $con->prepare("SELECT * FROM items WHERE Item_Id = ? ");
+        //$stmt->execute(array($userid));
+
+
+        if ($check > 0) {
+            $stmt = $con->prepare("UPDATE items SET Approve = 1  WHERE Item_Id = ?");
+
+            $stmt->execute(array($itemid));
+
+            $msg =   '<div class="alert alert-success">' . 'Item Is Approved  </div>' . '<br>';
+            redirectHome($msg, 'back', 1);
+        } else {
+            echo '<div class="alert alert-dange">' . 'deleted  not  </div>' . '<br>';
+            $msg = '<div class="alert alert-danger">' . 'Failed Approve Error because no id exists </div>' . '<br>';
+            redirectHome($msg, 'back');
+        }
     }
     include $tpl . 'footer.php';
 } else {
