@@ -32,7 +32,9 @@
         <li class="nav navbar-nav">
           <a href="items.php"><?php echo lang('Items') ?></a>
         </li>
-
+        <li class="nav navbar-nav">
+          <a href="comments.php"><?php echo lang('comnt') ?></a>
+        </li>
         <li class="nav navbar-nav">
           <a href="#"><?php echo lang('Statis') ?></a>
         </li>

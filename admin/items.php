@@ -341,10 +341,6 @@ if (isset($_SESSION['Username'])) {
     } elseif ($page == 'Approve') {
         $itemid = isset($_GET['itemid']) && is_numeric($_GET['itemid']) ? intval($_GET['itemid']) : 0;
         $check = checkItem('Item_Id', 'items', $itemid); //
-        // $stmt = $con->prepare("SELECT * FROM items WHERE Item_Id = ? ");
-        //$stmt->execute(array($userid));
-
-
         if ($check > 0) {
             $stmt = $con->prepare("UPDATE items SET Approve = 1  WHERE Item_Id = ?");
 
