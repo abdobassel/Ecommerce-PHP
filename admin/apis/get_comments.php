@@ -1,13 +1,12 @@
 <?php
 // استيراد الملف الذي يحتوي على الاتصال بقاعدة البيانات وأي دوال أو متغيرات تحتاج إليها هنا
-include 'config.php';
+include '../config.php';
 
 // التحقق من جلسة المستخدم
 session_start();
 if (!isset($_SESSION['Username'])) {
-    // إعادة توجيه المستخدم إلى صفحة تسجيل الدخول أو عرض رسالة تنبيه
-    header('Location: login.php');
-    exit(); // يجب على PHP التوقف هنا لضمان عدم تنفيذ أي كود آخر بعد التوجيه
+    header('Location: ../index.php');
+    exit();
 }
 
 try {

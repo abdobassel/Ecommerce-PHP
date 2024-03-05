@@ -83,62 +83,36 @@ if (isset($_SESSION['Username'])) {
         //}
         // chech if userid is number and get in val of it and select data user from userid from dbase
         // fetch data to form and => user can change it
-        $userid = isset($_GET['userid']) && is_numeric($_GET['userid']) ? intval($_GET['userid']) : 0;
+        $comid = isset($_GET['comid']) && is_numeric($_GET['comid']) ? intval($_GET['comid']) : 0;
 
-        $stmt = $con->prepare("SELECT * FROM users WHERE UserID = ? ");
-        $stmt->execute(array($userid));
+        $stmt = $con->prepare("SELECT * FROM comments WHERE comment_id = ? ");
+        $stmt->execute(array($comid));
         $row = $stmt->fetch(); // array of info db
         $count = $stmt->rowCount();
 
         if ($count > 0) {
             // form show ...
         ?>
-            <h1 class='text-center'>Edit Member</h1>
+            <h1 class='text-center'>Edit Comment</h1>
             <div class="container">
-                <form action="?page=Update" method="post"> <!-- page=update => form update  -->
-                    <div class="form-group form-group-lg">
-                        <input type="hidden" value="<?php
-                                                    echo $userid;
-                                                    ?>" name="userid">
-                        <label class="col-sm2 control-label">Username</label>
+                <form class="form-horizontal" action="comments.php?page=Update" method="post">
+                    <!-- start comment body -->
+                    <div class="form-group">
+                        <input type="hidden" value="<?php echo $comid; ?>" name="comid">
+                        <label class="col-sm-2 control-label">Comment</label>
                         <div class="col-sm-10">
-                            <input type="text" value="<?php
-                                                        echo $row['Username'];
-                                                        ?>" class="form-control" name="username" autocomplete="off">
+                            <textarea class="form-control" name="comment"><?php echo $row['body']; ?></textarea>
                         </div>
-                        <!-- end username -->
-                        <div class="form-group form-group-lg">
-                            <label class="col-sm2 control-label">Password</label>
-                            <input type="hidden" value="<?php echo $row['Password'];  ?>" name="old-password">
-                            <div class="col-sm-10">
-                                <input type="password" value="" class="form-control" name="new-password" autocomplete="new-password">
-                            </div>
-                            <!-- end pass -->
-                            <div class="form-group form-group-lg">
-                                <label class="col-sm2 control-label">Email</label>
-                                <div class="col-sm-10">
-                                    <input type="email" value="<?php
-                                                                echo $row['Email'];
-                                                                ?>" class="form-control" name="email">
-                                </div>
-                                <!-- end email -->
+                    </div>
+                    <!-- end comment body -->
 
-                                <div class="form-group form-group-lg">
-                                    <label class="col-sm2 control-label">Fullname</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" value="
-                                    <?php
-                                    echo $row['Fullname'];
-                                    ?>" class="form-control" name="full">
-                                    </div>
-                                    <!-- end fullname -->
-
-                                    <div class="form-group">
-                                        <div class="col-sm-offset-2 col-sm-10">
-                                            <input type="submit" value="Save" class="btn btn-primary">
-                                        </div>
-                                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <input type="submit" value="Save" class="btn btn-primary">
+                        </div>
+                    </div>
                 </form>
+
 
             </div>
 
@@ -150,55 +124,31 @@ if (isset($_SESSION['Username'])) {
         }
     } elseif ($page == 'Update') {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $userid = $_POST['userid'];
-            $username = $_POST['username'];
-            //$password = $_POST['password'];
-            $email = $_POST['email'];
-            $fullname = $_POST['full'];
-            // update sql
-            // password change or old password
-            $password = '';
-            if (empty($_POST['new-password'])) {
-                $password = $_POST['old-password'];
+            $comid = $_POST['comid'];
+            $body = $_POST['comment'];
+
+
+
+
+
+            if (empty($body)) {
+                $msg = '<div class="alert alert-success"> Not Update Comments is emtpy </div>';
+                redirectHome($msg, 'back'); // back ==> means $url is not null;
+                echo 'No update';
             } else {
-                $password = sha1($_POST['new-password']);
-            }
-            $formError = array();
+                $stmt = $con->prepare("UPDATE comments SET body = ? WHERE comment_id = ?");
+                $stmt->execute(array($body, $comid));
 
-            if (empty($username) || empty($email) || strlen($username) > 20) {
-                $formError[] = 'username no morethan 20 char and email => required ';
-            }
-            if (empty($fullname) || strlen($fullname) < 4) {
-                $formError[] = 'fullname is required and more than 4 character ';
-            }
-
-
-            //   $check = checkItem('Username', 'users', $username);
-            // if ($check == 1) {
-            // $formError[] = 'Username is exists in database ...please change username and try again';
-            //}
-            foreach ($formError as $error) {
-                echo '<br>';
-                echo '<br>';
-                echo '<div class="alert alert-danger">' . $error . ' </div>' . '<br>';
-            }
-            if (empty($formError)) {
-                $stmt = $con->prepare("UPDATE users SET Username = ?, Email = ?, Fullname= ?, Password = ? WHERE UserID = ?");
-                $stmt->execute(array($username, $email, $fullname, $password, $userid));
-                $count = $stmt->rowCount();
 
                 echo "<br>";
                 echo "<br>";
                 // echo '<div class="alert alert-success">' . 'record is ' . $count . '</div>' . '<br>';
-                $msg = '<div class="alert alert-success">' . 'record is ' . $count . '</div>' . '<br>';
+                $msg = '<div class="alert alert-success">' . 'Updated Comment' . '</div>' . '<br>';
                 redirectHome($msg, 'back'); // back ==> means $url is not null;
-            } else {
-                echo 'No update';
+
             }
         } else {
-            echo "<br>";
-            echo "<br>";
-            echo "<br>";
+
             $msg =    "<div class='alert alert-danger'> Sorry you can't browse page update diectly </div>";
             redirectHome($msg);
         }
@@ -227,23 +177,16 @@ if (isset($_SESSION['Username'])) {
             redirectHome($msg, 'back');
         }
     } elseif ($page == "Approve") {
-        $userid = isset($_GET['userid']) && is_numeric($_GET['userid']) ? intval($_GET['userid']) : 0;
+        $comid = isset($_GET['comid']) && is_numeric($_GET['comid']) ? intval($_GET['comid']) : 0;
 
-        $check = checkItem('userid', 'users', $userid); //
+        $check = checkItem('comment_id', 'comments', $comid);
 
+        if ($check > 0) {
+            $stmt = $con->prepare("UPDATE comments SET Approve = 1  WHERE comment_id = ?");
 
-        $stmt = $con->prepare("SELECT * FROM users WHERE UserID = ? ");
-        $stmt->execute(array($userid));
+            $stmt->execute(array($comid));
 
-        $count = $stmt->rowCount();
-        if ($count > 0 && $check > 0) {
-            $stmt = $con->prepare("UPDATE users SET RegStatus = 1  WHERE UserID = ?");
-
-            $stmt->execute(array($userid));
-            echo '<br>';
-            echo '<br>';
-            echo '<br>';
-            $msg =   '<div class="alert alert-success">' . 'succsess Activate  </div>' . '<br>';
+            $msg =   '<div class="alert alert-success">' . ' Comment is Public Now </div>' . '<br>';
             redirectHome($msg, 'back');
         } else {
             echo '<div class="alert alert-dange">' . 'deleted  not  </div>' . '<br>';
