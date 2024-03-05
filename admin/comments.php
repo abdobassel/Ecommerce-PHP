@@ -21,7 +21,11 @@ if (isset($_SESSION['Username'])) {
     if ($page == "Manage") {
 
 
-        $stmt = $con->prepare("SELECT * FROM comments");
+        $stmt = $con->prepare(" SELECT comments.*, users.Username , items.Name AS item_name
+        FROM comments 
+        INNER JOIN users ON users.UserID = comments.user_id
+        INNER JOIN items ON items.Item_Id = comments.item_id
+        ");
 
         $stmt->execute();
         $rows = $stmt->fetchAll();
@@ -44,8 +48,8 @@ if (isset($_SESSION['Username'])) {
                         echo "<tr>";
                         echo "<td>" . $row["comment_id"] . "</td>";
                         echo "<td>" . $row["body"] . "</td>";
-                        echo "<td>" . $row["user_id"] . "</td>";
-                        echo "<td>" . $row["item_id"] . "</td>";
+                        echo "<td>" . $row["Username"] . "</td>";
+                        echo "<td>" . $row["item_name"] . "</td>";
                         echo "<td>" . $row["date"] . "</td>";
                         echo "<td>
 					<a href='members.php?page=Edit&comid=" . $row['comment_id'] . "' class='btn btn-success'>Edit</a>
