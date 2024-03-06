@@ -168,28 +168,33 @@ if (isset($_SESSION['Username'])) {
                 $formError[] = 'fullname is required and more than 4 character ';
             }
 
-
-            //   $check = checkItem('Username', 'users', $username);
-            // if ($check == 1) {
-            // $formError[] = 'Username is exists in database ...please change username and try again';
-            //}
             foreach ($formError as $error) {
                 echo '<br>';
                 echo '<br>';
                 echo '<div class="alert alert-danger">' . $error . ' </div>' . '<br>';
             }
             if (empty($formError)) {
-                $stmt = $con->prepare("UPDATE users SET Username = ?, Email = ?, Fullname= ?, Password = ? WHERE UserID = ?");
-                $stmt->execute(array($username, $email, $fullname, $password, $userid));
-                $count = $stmt->rowCount();
 
-                echo "<br>";
-                echo "<br>";
-                // echo '<div class="alert alert-success">' . 'record is ' . $count . '</div>' . '<br>';
-                $msg = '<div class="alert alert-success">' . 'record is ' . $count . '</div>' . '<br>';
-                redirectHome($msg, 'back'); // back ==> means $url is not null;
+                $stm2 = $con->prepare("SELECT * FROM users WHERE Username =? AND UserID != ? ");
+                $stm2->execute(array($username, $userid));
+                $count = $stm2->rowCount();
+                if ($count == 1) {
+                    $msg = '<div class="alert alert-danger">Sorry Username Is Exists </div>' . '<br>';
+                    redirectHome($msg, 'back'); // back ==> means $url is not null;
+                } else {
+                    $stmt = $con->prepare("UPDATE users SET Username = ?, Email = ?, Fullname= ?, Password = ? WHERE UserID = ?");
+                    $stmt->execute(array($username, $email, $fullname, $password, $userid));
+
+
+                    echo "<br>";
+                    echo "<br>";
+                    // echo '<div class="alert alert-success">' . 'record is ' . $count . '</div>' . '<br>';
+                    $msg = '<div class="alert alert-success">Success Update Memeber</div>' . '<br>';
+                    redirectHome($msg, 'back'); // back ==> means $url is not null;
+                }
             } else {
-                echo 'No update';
+                $msg =  '<div class="alert alert-danger">' . $error . ' </div>' . '<br>';
+                redirectHome($msg);
             }
         } else {
             echo "<br>";
