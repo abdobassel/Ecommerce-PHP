@@ -48,9 +48,8 @@
             <?php echo lang('Edit') ?><span class="caret"></span>
           </a>
           <ul class="dropdown-menu" role="menu">
-            <!--
-        
-            -->
+
+            <li><a href="../index.php">Visit Shop</a></li>
             <li><a href="members.php?page=Edit&userid=<?php echo $_SESSION['UserID']; ?>">Edit Profile</a></li>
             <li><a href="#">Settings</a></li>
             <li><a href="logout.php">Logout</a></li>

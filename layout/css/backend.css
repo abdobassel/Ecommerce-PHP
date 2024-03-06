@@ -1,0 +1,128 @@
+/* main rules */
+body {
+    background-color: #f4f4f4;
+    overflow: auto;
+    padding-top: 70px;
+}
+
+.navbar {
+    background-color: #333;
+    color: #fff;
+    height: 60px;
+    margin-top: 5px;
+    /* تحديد ارتفاع النافبار */
+    padding-top: 10px;
+    /* ضبط المسافة العمودية للنافبار من الأعلى */
+    padding-bottom: 10px;
+    /* ضبط المسافة العمودية للنافبار من الأسفل */
+}
+
+.navbar-brand {
+    padding: 5px 15px;
+    /* تباعد النص عن شعار البراند */
+    font-size: 20px;
+    /* ضبط المسافة داخل شعار الموقع */
+}
+
+.navbar-nav li a {
+    padding: 10px 15px;
+    /* ضبط المسافة بين عناصر النافبار */
+}
+
+@media (max-width: 768px) {
+    .navbar-nav li {
+        padding: 10px 0;
+    }
+}
+
+@media (max-width: 900px) {
+    .navbar-nav li {
+        padding: 10px 0;
+    }
+
+    .navbar {
+        height: 100px;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        height: 100px;
+    }
+}
+
+/* login */
+.login {
+    width: 400px;
+    margin: 100px auto;
+}
+
+.login input {
+    margin-bottom: 10px;
+}
+
+.login .form-control {
+    background-color: #e5e5e5;
+}
+
+/* dashboard*/
+.home-stats .stat {
+    background-color: #EEE;
+    border-radius: 10px;
+    padding: 20px;
+    font-size: 20;
+    color: #FFF;
+}
+
+.home-stats .st-members {
+    background-color: #f9ca24;
+}
+
+.home-stats .st-items {
+    background-color: #f0932b;
+}
+
+.home-stats .st-comments {
+    background-color: #033945;
+}
+
+.home-stats .stat a {
+    color: #FFF;
+}
+
+.home-stats .stat a:hover {
+    text-decoration: none;
+    color: aqua;
+}
+
+.home-stats .st-pending {
+    background-color: #eb4d4b;
+}
+
+.home-stats .stat span {
+    display: block;
+    font-size: 50;
+}
+
+.latest-users {
+    margin-bottom: 0px;
+}
+
+.latest-users li {
+    padding: 5px 0;
+    overflow: hidden;
+    font-size: 20;
+    font-weight: 600;
+}
+
+.latest-users .btn-success {
+    padding: 3px 0;
+}
+
+.latest {
+    margin-top: 50px;
+}
+
+h1 {
+    font-size: 55;
+}

@@ -75,7 +75,7 @@ if (isset($_SESSION['Username'])) {
                 <div class="col-sm-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <i class="fa fa-users"></i>Latest users reg
+                            <i class="fa fa-users"></i> Latest users reg
                         </div>
                         <div class="panel-body">
                             <ui class="list-unstyled latest-users">
@@ -102,7 +102,7 @@ if (isset($_SESSION['Username'])) {
                 <div class="col-sm-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <i class="fa fa-tag"></i>Latest items
+                            <i class="fa fa-tag"></i> Latest items
                         </div>
                         <div class="panel-body">
                             <ui class="list-unstyled latest-users">
@@ -144,7 +144,7 @@ if (isset($_SESSION['Username'])) {
                 <div class="col-sm-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <i class="fa fa-comment"></i>Comments...
+                            <i class="fa fa-comment"></i> Latest 3 Comments...
                         </div>
                         <div class="panel-body">
                             <ui class="list-unstyled latest-users">
@@ -155,6 +155,8 @@ if (isset($_SESSION['Username'])) {
                                   FROM comments 
                                   INNER JOIN users ON users.UserID = comments.user_id
                                   INNER JOIN items ON items.Item_Id = comments.item_id
+                                  ORDER BY comment_id DESC
+                                  LIMIT 3
                                 
                                   ");
 
@@ -188,7 +190,7 @@ if (isset($_SESSION['Username'])) {
                 <div class="col-sm-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <i class="fa fa-tag"></i>Latest items
+                            <i class="fa fa-tag"></i> Latest items
                         </div>
                         <div class="panel-body">
                             <ui class="list-unstyled latest-users">

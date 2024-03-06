@@ -24,6 +24,8 @@ if (isset($_SESSION['Username'])) {
         FROM comments 
         INNER JOIN users ON users.UserID = comments.user_id
         INNER JOIN items ON items.Item_Id = comments.item_id
+        ORDER BY comment_id DESC
+        
         ");
 
         $stmt->execute();

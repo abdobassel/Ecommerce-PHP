@@ -21,7 +21,7 @@ if (isset($_SESSION['Username'])) {
 
         }
 
-        $stmt = $con->prepare("SELECT * FROM users WHERE GroupID != 1 $query");
+        $stmt = $con->prepare("SELECT * FROM users WHERE GroupID != 1 $query ORDER BY UserID DESC");
 
         $stmt->execute();
         $rows = $stmt->fetchAll();

@@ -18,7 +18,8 @@ if (isset($_SESSION['Username'])) {
         $stmt = $con->prepare("SELECT `items`.*,
          categories.Name AS cat_name ,users.Username FROM items 
          INNER JOIN categories ON categories.Id = items.Cat_Id 
-         INNER JOIN users ON users.UserID = items.Mem_ID;
+         INNER JOIN users ON users.UserID = items.Mem_ID
+         ORDER BY Item_Id DESC
         ");
 
         $stmt->execute();
