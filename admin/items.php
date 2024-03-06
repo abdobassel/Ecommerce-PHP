@@ -280,7 +280,7 @@ if (isset($_SESSION['Username'])) {
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Category</label>
                         <div class="col-sm-10">
-                            <select class="form-control" name="categor">
+                            <select class="form-control" name="category">
 
                                 <?php
                                 $stms = $con->prepare("SELECT * FROM categories");
@@ -346,7 +346,7 @@ if (isset($_SESSION['Username'])) {
 
 
 
-                    <h1 class="text-center">Manage [ <?php echo $item['Name']; ?> ] Comments</h1>
+                    <h1 class="text-center">Manage [<span style="color: green;"> <?php echo $item['Name']; ?></span> ] Comments</h1>
                     <div class="container">
                         <div class="table-responsive">
                             <table class="table table-bordered">
@@ -400,6 +400,46 @@ if (isset($_SESSION['Username'])) {
 
         }
     } elseif ($page == 'Update') {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $itemid = $_POST['itemid'];
+            $name = $_POST['name'];
+
+            $description = $_POST['desc'];
+            $price = $_POST['price'];
+
+            $country = $_POST['country'];
+
+            $status = $_POST['status'];
+
+            $category = $_POST['category'];
+            $member = $_POST['member'];
+
+
+            $chek = checkItem('Item_Id', 'items', $itemid);
+
+
+            if (empty($_POST['name']) == true || empty($_POST['price']) == true || empty($_POST['country']) == true) {
+                echo '<br>';
+                echo '<br>';
+                $msg = '<div class="alert alert-danger">' . 'Some Feilds can\'t be empty  </div>' . '<br>';
+                redirectHome($msg, 'back', 2);
+            } else {
+
+                $stmt = $con->prepare("UPDATE items SET Name = ?, Description = ?, Price= ?, Country_Made = ?, Status=?, Mem_ID =?, Cat_Id = ? WHERE Item_Id = ?");
+                $stmt->execute(array($name, $description, $price, $country, $status, $member, $category, $itemid));
+
+
+                echo "<br>";
+                echo "<br>";
+                // echo '<div class="alert alert-success">' . 'record is ' . $count . '</div>' . '<br>';
+                $msg = '<div class="alert alert-success">' . 'Update is Successfuly </div>' . '<br>';
+                redirectHome($msg, 'back'); // back ==> means $url is not null;
+            }
+        } else {
+
+            $msg =    "<div class='alert alert-danger'> Sorry you can't browse page update diectly </div>";
+            redirectHome($msg);
+        }
     } elseif ($page == 'Delete') {
     } elseif ($page == 'Approve') {
         $itemid = isset($_GET['itemid']) && is_numeric($_GET['itemid']) ? intval($_GET['itemid']) : 0;

@@ -160,23 +160,25 @@ if (isset($_SESSION['Username'])) {
 
                                 $stmt->execute();
                                 $comments = $stmt->fetchAll();
+                                if (!empty($comments)) {
+                                    foreach ($comments as $comment) {
+                                        echo "<li>";
 
-                                foreach ($comments as $comment) {
-                                    echo "<li>";
-                                    echo 'New Comment from [ ' . '<a href="members.php?page=Edit&userid=' . $comment['user_id'] . '">'
+                                        echo  '[ <a  href="members.php?page=Edit&userid=' . $comment['user_id'] . '">'
 
-                                        . $comment['Username'] . '</a>' .
+                                            . $comment['Username'] . '</a>' . ' ] Commented On ' .
 
-                                        ' ] On [ ' . '<a href="items.php?page=Edit&itemid=' . $comment['item_id'] . '">'
-                                        . $comment['item_name'];
-                                    echo '</a>' . ' ]';
-                                    echo '<br>';
+                                            ' [ ' . '<a href="items.php?page=Edit&itemid=' . $comment['item_id'] . '">'
+                                            . $comment['item_name'];
+                                        echo '</a>' . ' ]';
+                                        echo '<br>';
 
-                                    echo '<a href="comments.php?page=Edit&comid=' . $comment['comment_id'] . '">';
+                                        echo '<a style="color:green;" href="comments.php?page=Edit&comid=' . $comment['comment_id'] . '">';
 
-                                    echo '<span>'  . $comment['body'] . '</span>';
-                                    echo "</a>";
-                                    echo "</li>";
+                                        echo '<span>'  . $comment['body'] . '</span>';
+                                        echo "</a>";
+                                        echo "</li>";
+                                    }
                                 }
                                 ?>
                             </ui>
