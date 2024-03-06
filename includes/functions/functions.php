@@ -108,3 +108,16 @@ function getCategories($limit = 8)
     $rows = $stm->fetchAll();
     return $rows;
 }
+
+// get items front 
+
+function getItems($cat_id)
+{
+    global $con;
+
+    $stm = $con->prepare("SELECT * FROM items WHERE Cat_Id = ?  ORDER BY Item_Id DESC");
+    $stm->execute(array($cat_id));
+
+    $rows = $stm->fetchAll();
+    return $rows;
+}

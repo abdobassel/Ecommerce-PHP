@@ -17,15 +17,26 @@ body {
     /* ضبط المسافة العمودية للنافبار من الأسفل */
 }
 
+.navbar-inverse .navbar-brand {
+    color: #ed7c0b;
+}
+
 .navbar-brand {
     padding: 5px 15px;
     /* تباعد النص عن شعار البراند */
     font-size: 20px;
+
     /* ضبط المسافة داخل شعار الموقع */
+}
+
+.navbar-brand a {
+    color: #f0932b;
 }
 
 .navbar-nav li a {
     padding: 10px 15px;
+    font-size: 18px;
+
     /* ضبط المسافة بين عناصر النافبار */
 }
 
