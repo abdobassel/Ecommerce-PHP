@@ -1,6 +1,7 @@
 <?php
 
 // main index front not admins
+session_start();
 include "init.php";
 
 $cat_id = $_GET['catid'];
