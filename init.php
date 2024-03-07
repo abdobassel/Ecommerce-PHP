@@ -2,6 +2,11 @@
 // init main website not admin
 include 'admin/config.php'; // connect here becase inint in all php pages;
 //routes 
+$userSession = '';
+if (isset($_SESSION['user'])) {
+    $userSession = $_SESSION['user'];
+}
+
 $tpl = "includes/templates/";
 $css = "layOut/css/";
 $js = "layOut/js/";

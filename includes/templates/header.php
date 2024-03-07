@@ -19,13 +19,15 @@
 
             <?php
             if (isset($_SESSION['user'])) {
-                echo 'Welcome' . $_SESSION['user'];
+                echo 'Welcome ' . $userSession . ' | ';
 
-                $status = checkUsersActivatOrNot($_SESSION['user']);
+                $status = checkUsersActivatOrNot($userSession);
                 if ($status == 1) {
                     echo '<br>';
-                    echo 'You Are Not Activate yet..';
+                    echo 'You Are Not Activate yet.. | ';
                 }
+                echo '<a href="profile.php">My Profile</a>' . ' | ';
+                echo '<a href="logout.php">LogOut</a>' . ' ';
             } else { ?>
                 <a href="login.php">
                     <span class="pull-right">
