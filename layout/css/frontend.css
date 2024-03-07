@@ -2,7 +2,7 @@
 body {
     background-color: #f4f4f4;
     overflow: auto;
-    padding-top: 70px;
+
 }
 
 .navbar {
@@ -74,66 +74,57 @@ body {
 
 .login .form-control {
     background-color: #e5e5e5;
+    position: relative;
 }
 
-/* dashboard*/
-.home-stats .stat {
-    background-color: #EEE;
-    border-radius: 10px;
-    padding: 20px;
-    font-size: 20;
-    color: #FFF;
+.signup {
+    width: 400px;
+    margin: 100px auto;
 }
 
-.home-stats .st-members {
-    background-color: #f9ca24;
+.signup input {
+    margin-bottom: 10px;
 }
 
-.home-stats .st-items {
-    background-color: #f0932b;
+.signup .form-control {
+    background-color: #e5e5e5;
+    position: relative;
 }
 
-.home-stats .st-comments {
-    background-color: #033945;
-}
 
-.home-stats .stat a {
-    color: #FFF;
-}
-
-.home-stats .stat a:hover {
-    text-decoration: none;
-    color: aqua;
-}
-
-.home-stats .st-pending {
-    background-color: #eb4d4b;
-}
-
-.home-stats .stat span {
-    display: block;
-    font-size: 50;
-}
-
-.latest-users {
-    margin-bottom: 0px;
-}
-
-.latest-users li {
-    padding: 5px 0;
-    overflow: hidden;
-    font-size: 20;
-    font-weight: 600;
-}
-
-.latest-users .btn-success {
-    padding: 3px 0;
-}
-
-.latest {
-    margin-top: 50px;
-}
 
 h1 {
     font-size: 55;
+    font-weight: bold;
+    color: #666;
+    margin: 40px 0;
+
+
+}
+
+/* categpries front */
+
+.item-box {
+    position: relative;
+
+}
+
+.item-box .price-tag {
+    background-color: #3c2424;
+    padding: 2px 0;
+
+    color: rgb(218, 207, 193);
+
+    font-weight: 600;
+
+    position: absolute;
+    left: 0px;
+
+    top: 10px;
+
+}
+
+.upper-bar {
+    padding: 10px;
+    background-color: #FFF;
 }

@@ -121,3 +121,13 @@ function getItems($cat_id)
     $rows = $stm->fetchAll();
     return $rows;
 }
+// check if user if acitvate or not 
+function checkUsersActivatOrNot($user)
+{
+    global $con;
+    $stmt = $con->prepare("SELECT Username ,RegStatus  FROM users WHERE Username= ? And RegStatus = 0");
+    $stmt->execute(array($user));
+    $status = $stmt->rowCount();
+
+    return $status;
+}

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo $css; ?>bootstrap.min.css">
     <link rel="stylesheet" href="<?php echo $css; ?>font-awesome.min.css">
-    <link rel="stylesheet" href="<?php echo $css; ?>backend.css">
+    <link rel="stylesheet" href="<?php echo $css; ?>frontend.css">
 
 
 
@@ -14,7 +14,29 @@
 </head>
 
 <body>
-    <div class="upper-bar navbar-fixed-top">Upper bar</div>
+    <div class="upper-bar">
+        <div class="container">
+
+            <?php
+            if (isset($_SESSION['user'])) {
+                echo 'Welcome' . $_SESSION['user'];
+
+                $status = checkUsersActivatOrNot($_SESSION['user']);
+                if ($status == 1) {
+                    echo '<br>';
+                    echo 'You Are Not Activate yet..';
+                }
+            } else { ?>
+                <a href="login.php">
+                    <span class="pull-right">
+                        Login | Sin Up
+                    </span>
+                </a>
+            <?php }
+            ?>
+
+        </div>
+    </div>
     <nav class="navbar navbar-inverse" role="navigation">
         <div class="container">
             <div class="navbar-header navbar-right">

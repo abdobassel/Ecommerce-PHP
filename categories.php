@@ -15,11 +15,14 @@ $items = getItems($cat_id); ?>
     <div class="row">
         <?php
         if (empty($items)) {
-            echo '<div class="alert alert-danger"><h3 class=" text-center">There is No items yet...</h3> </div>' . '<br>';
+            echo '<div class="alert alert-danger"><h3 class="text-center">There is No items yet...</h3> </div>' . '<br>';
         } else {
             foreach ($items as $item) { ?>
                 <div class="col-sm-6 col-md-3">
-                    <div class="thumbnail">
+                    <div class="thumbnail item-box">
+                        <span class="price-tag"><?php
+                                                echo  $item['Price'];
+                                                ?></span>
                         <img class="img-responsive" src="1.jpg" alt="">
                         <div class="caption">
                             <h3><?php echo
@@ -28,9 +31,10 @@ $items = getItems($cat_id); ?>
                             <p><?php
                                 echo  $item['Description'];
                                 ?></p>
-                            <h4><?php
-                                echo  $item['Price'];
-                                ?></h4>
+                            <p> Date : <?php
+                                        echo  $item['Add_Date'];
+                                        ?></p>
+
                         </div>
                     </div>
 
