@@ -1,7 +1,7 @@
 <?php
 session_start();
 $pageTitle = 'Login';
-if (isset($_SESSION['user'])) {
+if (isset($_SESSION['user']) || isset($_SESSION['Username'])) {
     header("Location: index.php");
 }
 include "init.php";
