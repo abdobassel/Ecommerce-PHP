@@ -27,7 +27,7 @@ $items = getItems($cat_id); ?>
                         <img class="img-responsive" src="1.jpg" alt="">
                         <div class="caption">
                             <h3><?php echo
-                                $item['Name'];
+                                '<a href="items.php?itemid=' . $item["Item_Id"] . '">' . $item['Name'] . '</a>';
                                 ?></h3>
                             <p><?php
                                 echo  $item['Description'];
