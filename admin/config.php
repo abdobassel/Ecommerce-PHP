@@ -1,5 +1,5 @@
 <?php
- // connect database
+// connect database
 $dsn = 'mysql:host=localhost;dbname=shop_elzero';  // $dsn =>data source name
 $user = 'root';
 $pass = '';
@@ -11,9 +11,9 @@ $option = array(
 
 try {
     //con => varible connection
-    $con = new PDO($dsn,$user,$pass,$option);
-    $con->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-    echo "You are Connected to dbase";
+    $con = new PDO($dsn, $user, $pass, $option);
+    $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    //   echo "You are Connected to dbase";
 } catch (PDOException $e) {
-   echo "Failed Connect". $e->getMessage();
+    echo "Failed Connect" . $e->getMessage();
 }

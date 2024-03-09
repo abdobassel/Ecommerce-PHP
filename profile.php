@@ -12,14 +12,18 @@ if (isset($_SESSION['user'])) {
     $userInfo = $stmt->fetch();
 ?>
     <h1 class="text-center">My Profile</h1>
-    <div class="information-block">
+    <div class="information block">
         <div class="container">
             <div class="panel panel-primary">
                 <div class="panel-heading">My Info</div>
-                <div class="panel-body">Full Name : <?php echo $userInfo['Fullname'] ?> </div>
-                <div class="panel-body">Username : <?php echo $userInfo['Username'] ?> </div>
-                <div class="panel-body">Email : <?php echo $userInfo['Email'] ?> </div>
-                <div class="panel-body">Date : <?php echo $userInfo['Date'] ?> </div>
+                <ul class="list-unstyled">
+                    <li> <span> Name :</span> <?php echo $userInfo['Fullname'] ?> </li>
+                    <li> <span> Useername :</span> <?php echo $userInfo['Username'] ?> </li>
+                    <li> <span> Email :</span> <?php echo $userInfo['Email'] ?> </li>
+                    <li> <span> Joined Date:</span> <?php echo $userInfo['Date'] ?> </li>
+                </ul>
+
+
 
             </div>
         </div>
@@ -43,6 +47,7 @@ if (isset($_SESSION['user'])) {
                         <?php
                         if (empty($items)) {
                             echo '<div class="alert alert-danger"><h3 class="text-center">There is No items yet...</h3> </div>' . '<br>';
+                            echo "<a href='newad.php'class='btn btn-success'>Create A New Ad</a>";
                         } else {
                             foreach ($items as $item) { ?>
                                 <div class="col-sm-6 col-md-3">
@@ -74,6 +79,7 @@ if (isset($_SESSION['user'])) {
 
                         ?>
                     </div>
+                    <a href='newad.php' class='btn btn-success'>Create A New Ad</a>
 
 
                 </div>

@@ -196,8 +196,7 @@ if (isset($_SESSION['Username'])) {
 
     } elseif ($page == 'Insert') {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            echo '<br>';
-            echo '<br>';
+
             $name = $_POST['name'];
 
             $description = $_POST['description'];
