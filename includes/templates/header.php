@@ -56,8 +56,7 @@
                 <ul class="nav navbar-nav navbar-left">
                     <li><a href="index.php">Home</a></li>
                     <?php foreach (getCategories() as $cat) : ?>
-                        <li><a href="categories.php?catid=<?php echo $cat['Id']; ?>&pagename=<?php echo str_replace(' ', '-', $cat['Name']);
-                                                                                                ?>">
+                        <li><a href="categories.php?catid=<?php echo $cat['Id']; ?>">
                                 <?php echo $cat['Name']; ?></a></li>
                     <?php endforeach; ?>
                 </ul>

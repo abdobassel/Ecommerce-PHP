@@ -5,13 +5,11 @@ session_start();
 include "init.php";
 
 $cat_id = $_GET['catid'];
-$pagename = str_replace('-', ' ', $_GET['pagename']);
+//$pagename = str_replace('-', ' ', $_GET['pagename']);
 $items = getItems($cat_id); ?>
 
 <div class="container">
-    <h1 class="text-center"><?php
-                            echo $pagename;
-                            ?>
+    <h1 class="text-center">Show Category Items
     </h1>
     <div class="row">
         <?php
