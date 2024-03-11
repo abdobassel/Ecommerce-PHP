@@ -177,3 +177,7 @@ h1 {
     height: auto;
     /* الحفاظ على نسبة الارتفاع للصورة */
 }
+
+span.category-name {
+    display: block;
+}

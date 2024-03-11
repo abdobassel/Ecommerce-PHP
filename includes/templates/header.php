@@ -16,32 +16,30 @@
 <body>
     <div class="upper-bar">
         <div class="container">
-            <?php if (isset($_SESSION['user'])) : ?>
-
-                <?php
-                $status = checkUsersActivatOrNot($userSession);
-                if ($status == 1) {
-                    echo '<span>You Are Not Activated Yet.. | </span>';
-                }
-                ?>
-
-                <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <?php echo $userSession; ?> <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <li><a href="profile.php">My Profile</a></li>
-                        <li><a href="logout.php">Logout</a></li>
-                        <li><a href="profile.php#my-ads">My Ads</a></li>
-                        <li><a href="newad.php">new ad</a></li>
-                    </ul>
-                </div>
-
-            <?php else : ?>
-                <a href="login.php">
-                    <span class="pull-right">Login | Sign Up</span>
-                </a>
-            <?php endif; ?>
+            <ul class="nav navbar-nav navbar-right">
+                <?php if (isset($_SESSION['user'])) : ?>
+                    <?php
+                    $status = checkUsersActivatOrNot($userSession);
+                    if ($status == 1) {
+                        echo '<li><span>You Are Not Activated Yet.. | </span></li>';
+                    }
+                    ?>
+                    <li class="dropdown">
+                        <a style="color: #7a8793;font-size:20px;" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <?php echo $userSession; ?> <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><a href="profile.php">My Profile</a></li>
+                            <li><a href="logout.php">Logout</a></li>
+                            <li><a href="profile.php#my-ads">My Ads</a></li>
+                            <li><a href="newad.php">New Ad</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="index.php#all-categories pull-left">All Categories</a></li>
+                <?php else : ?>
+                    <li><a href="login.php"><span class="pull-right">Login | Sign Up</span></a></li>
+                <?php endif; ?>
+            </ul>
         </div>
     </div>
 
@@ -55,12 +53,15 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand pop" href="index.php"><?php echo lang('Brand') ?></a>
+
             </div>
 
             <!--End navbar-header-->
             <div class="collapse navbar-collapse" id="app-nav">
                 <ul class="nav navbar-nav navbar-left">
+
                     <li><a href="index.php">Home</a></li>
+
                     <?php foreach (getCategories() as $cat) : ?>
                         <li><a href="categories.php?catid=<?php echo $cat['Id']; ?>">
                                 <?php echo $cat['Name']; ?></a></li>

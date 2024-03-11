@@ -108,7 +108,7 @@ if (isset($_GET['itemid'])) {
 
                                 <div class="col-md-offset-3">
                                     <h3>Add Comment</h3>
-                                    <form action="<?php echo $_SERVER['PHP_SELF'] . '?itemid=' . $itemid ?>" method="post">
+                                    <form action="<?php echo $_SERVER['PHP_SELF'] . '?itemid=' . $itemid ?>#comments-show" method="post">
                                         <div class="form-group">
                                             <textarea class="form-control" name="comment"></textarea>
                                             <input class="btn btn-primary" type="submit" value="Post">
@@ -163,7 +163,7 @@ if (isset($_GET['itemid'])) {
                                         </a>
                                     </div>
                                     <div class="media-body">
-                                        <h4 class="media-heading">
+                                        <h4 id="comments-show" class="media-heading">
                                             <!-- الاسم في رابط -->
                                             <a href="profile.php?username=<?php echo $comment['uname']; ?>">
                                                 <?php echo $comment['uname']; ?>
