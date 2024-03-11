@@ -16,29 +16,35 @@
 <body>
     <div class="upper-bar">
         <div class="container">
+            <?php if (isset($_SESSION['user'])) : ?>
 
-            <?php
-            if (isset($_SESSION['user'])) {
-                echo 'Welcome ' . $userSession . ' | ';
-
+                <?php
                 $status = checkUsersActivatOrNot($userSession);
                 if ($status == 1) {
-                    echo '<br>';
-                    echo 'You Are Not Activate yet.. | ';
+                    echo '<span>You Are Not Activated Yet.. | </span>';
                 }
-                echo '<a href="profile.php">My Profile</a>' . ' | ';
-                echo '<a href="logout.php">LogOut</a>' . ' ';
-            } else { ?>
-                <a href="login.php">
-                    <span class="pull-right">
-                        Login | Sin Up
-                    </span>
-                </a>
-            <?php }
-            ?>
+                ?>
 
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <?php echo $userSession; ?> <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a href="profile.php">My Profile</a></li>
+                        <li><a href="logout.php">Logout</a></li>
+                        <li><a href="profile.php#my-ads">My Ads</a></li>
+                        <li><a href="newad.php">new ad</a></li>
+                    </ul>
+                </div>
+
+            <?php else : ?>
+                <a href="login.php">
+                    <span class="pull-right">Login | Sign Up</span>
+                </a>
+            <?php endif; ?>
         </div>
     </div>
+
     <nav class="navbar navbar-inverse" role="navigation">
         <div class="container">
             <div class="navbar-header navbar-right">

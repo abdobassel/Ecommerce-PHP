@@ -31,7 +31,7 @@ if (isset($_SESSION['user'])) {
     <div class="information-block">
         <div class="container">
             <div class="panel panel-primary">
-                <div class="panel-heading">My Ads اعلاناتي</div>
+                <div id="my-ads" class="panel-heading">My Ads اعلاناتي</div>
                 <?php
                 $stmt2 = $con->prepare("SELECT * FROM items WHERE Mem_ID = ? ORDER BY Item_Id DESC");
                 $stmt2->execute(array($userInfo['UserID']));
@@ -108,57 +108,43 @@ if (isset($_SESSION['user'])) {
             <div class="panel panel-primary">
                 <div class="panel-heading">My Comments</div>
                 <?php
-                $stmt3 = $con->prepare("SELECT body,date FROM comments WHERE user_id = ? ORDER BY comment_id DESC");
+                $stmt3 = $con->prepare("SELECT c.body, c.date, u.Username FROM comments c INNER JOIN users u ON c.user_id = u.UserID WHERE c.user_id = ? ORDER BY c.comment_id DESC");
                 $stmt3->execute(array($userInfo['UserID']));
-
                 $comments = $stmt3->fetchAll();
-
-
-
                 ?>
                 <div class="panel-body">
-                    <div class="row">
-
-
-
-                        <?php
-                        if (empty($comments)) {
-                            echo '<div class="alert alert-danger"><h3 class="text-center">There is No Comments yet...</h3> </div>' . '<br>';
-                        } else {
-                            foreach ($comments as $comment) { ?>
-                                <div class="col-sm-6 col-md-3">
-                                    <div class="thumbnail item-box">
-
-
-                                        <div class="caption">
-                                            <h3><?php echo
-                                                $comment['body'];
-                                                ?></h3>
-                                            <p><?php
-                                                echo  $comment['date'];
-                                                ?></p>
-
-
-                                        </div>
-                                    </div>
-
+                    <?php if (empty($comments)) : ?>
+                        <div class="alert alert-danger">
+                            <h3 class="text-center">There is No Comments yet...</h3>
+                        </div>
+                    <?php else : ?>
+                        <?php foreach ($comments as $comment) : ?>
+                            <div class="media">
+                                <div class="media-left">
+                                    <!-- ارتبط الاسم بملف المستخدم أو أي صفحة أخرى -->
+                                    <a href="profile.php?username=<?php echo $comment['Username']; ?>">
+                                        <img class="media-object" src="1.jpg" alt="<?php echo $comment['Username']; ?>">
+                                    </a>
                                 </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading">
+                                        <!-- الاسم في رابط -->
+                                        <a href="profile.php?username=<?php echo $comment['Username']; ?>">
+                                            <?php echo $comment['Username']; ?>
+                                        </a>
+                                    </h4>
+                                    <p><?php echo $comment['body']; ?></p>
+                                    <p><?php echo $comment['date']; ?></p>
+                                </div>
+                            </div>
 
-
-
-                        <?php  }
-                        }
-
-                        ?>
-                    </div>
-
-
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
-
-
             </div>
         </div>
     </div>
+
 
 <?php
 
