@@ -1,6 +1,7 @@
 <?php
 
 // main index front not admins
+ob_start();
 session_start();
 $pageTitle = 'Profile';
 include "init.php";
@@ -99,6 +100,52 @@ if (isset($_GET['itemid'])) {
                     $comments = $stmt3->fetchAll();
 
 
+                    if (isset($_SESSION['user'])) {
+
+
+                    ?> <div class="panel-body">
+                            <div class="row">
+
+                                <div class="col-md-offset-3">
+                                    <h3>Add Comment</h3>
+                                    <form action="<?php echo $_SERVER['PHP_SELF'] . '?itemid=' . $itemid ?>" method="post">
+                                        <div class="form-group">
+                                            <textarea class="form-control" name="comment"></textarea>
+                                            <input class="btn btn-primary" type="submit" value="Post">
+                                        </div>
+                                </div>
+                                </form>
+                                <?php
+                                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                                    $usercommented = $con->prepare("SELECT * from users where Username = ?");
+                                    $usercommented->execute(array($_SESSION['user']));
+                                    $usercommentid =  $usercommented->fetch();
+
+
+                                    $comment = filter_var($_POST['comment'], FILTER_SANITIZE_SPECIAL_CHARS);
+                                    $user_id = $usercommentid['UserID'];
+                                    $item_id = $itemid;
+                                    if (!empty($comment)) {
+                                        $stmt3 = $con->prepare("INSERT INTO comments(body,date,user_id,item_id,Approve)
+                                     VALUES(:zbody, now(), :zuserid, :zitemid, 0)");
+
+                                        $stmt3->execute(array('zbody' => $comment, 'zuserid' => $user_id, 'zitemid' => $item_id));
+
+                                        $comm_count = $stmt3->rowCount();
+
+                                        if ($comm_count > 0) {
+                                            header('Location: items.php?itemid=' . $item_id);
+                                        }
+                                    }
+                                }
+                                ?>
+
+
+                            </div>
+
+
+                        </div>
+                    <?php   }
 
                     ?>
                     <div class="panel-body">
@@ -164,3 +211,4 @@ if (isset($_GET['itemid'])) {
 ?>
 
 <?php include $tpl . "footer.php";
+ob_end_flush();
