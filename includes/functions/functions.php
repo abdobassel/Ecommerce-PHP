@@ -109,13 +109,14 @@ function getCategories($limit = 8)
     return $rows;
 }
 
-// get items front 
+// get items front اعلانات وعلى حسب approve كمان النهاردة 11/3/2024
+//v2.0 => $approve
 
-function getItems($cat_id)
+function getItems($cat_id, $approve = NULL)
 {
     global $con;
-
-    $stm = $con->prepare("SELECT * FROM items WHERE Cat_Id = ?  ORDER BY Item_Id DESC");
+    $sql =  $approve == NULL ? 'AND Approve=1' : '';
+    $stm = $con->prepare("SELECT * FROM items WHERE Cat_Id = ? $sql  ORDER BY Item_Id DESC");
     $stm->execute(array($cat_id));
 
     $rows = $stm->fetchAll();

@@ -66,6 +66,13 @@ if (isset($_SESSION['user'])) {
                                             <p> Date : <?php
                                                         echo  $item['Add_Date'];
                                                         ?></p>
+                                            <?php
+                                            if ($item['Approve'] == 0) {
+                                            ?>
+                                                <p style="background-color: red;color:#eee;font-size:16px"> Waiting For Approve..
+                                                </p>
+                                            <?php     }
+                                            ?>
 
                                         </div>
                                     </div>

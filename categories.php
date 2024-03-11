@@ -6,7 +6,10 @@ include "init.php";
 
 $cat_id = $_GET['catid'];
 //$pagename = str_replace('-', ' ', $_GET['pagename']);
-$items = getItems($cat_id); ?>
+$items = getItems($cat_id);
+// getItems($catid)=> approve = 1 => show only appeoved items 
+// getItems($catid,anyvalue) => show all items
+?>
 
 <div class="container">
     <h1 class="text-center">Show Category Items

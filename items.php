@@ -43,7 +43,7 @@ if (isset($_GET['itemid'])) {
                             <h2>
                                 <?php echo $item['Name']; ?>
                             </h2>
-                            <p><?php echo $item['Description']; ?></p>
+                            <p style="font-size:17px;font-weight:600"><?php echo $item['Description']; ?></p>
                             <ul class="list-unstyled">
                                 <li>
                                     <span><i class="fa fa-user"></i> Username : </span> <a href="profile.php?userid=<?php echo $userInfo['UserID']; ?>">
