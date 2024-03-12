@@ -132,11 +132,10 @@ function checkUsersActivatOrNot($user)
 
     return $status;
 }
-function getAll($table, $order_by_field = NULL)
+function getAll($feild, $table, $where = NULL, $order_by_field, $ordering = 'DESC')
 {
     global $con;
-    $o_field = $order_by_field !== NULL ? 'ORDER BY ' . $order_by_field . ' DESC' : NULL;
-    $getAll = $con->prepare("SELECT * FROM $table $o_field");
+    $getAll = $con->prepare("SELECT $feild FROM $table $where ORDER BY $order_by_field $ordering");
     $getAll->execute();
 
     $all = $getAll->fetchAll();

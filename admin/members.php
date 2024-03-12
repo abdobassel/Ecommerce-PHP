@@ -206,44 +206,53 @@ if (isset($_SESSION['Username'])) {
     } elseif ($page == 'Add') { ?>
         <h1 class='text-center'>Add New Member</h1>
         <div class="container">
-            <form action="?page=Insert" method="post">
-                <div class="form-group form-group-lg">
+            <form action="?page=Insert" method="post" enctype="multipart/form-data">
+                <div class="form-group row">
 
-                    <label class="col-sm2 control-label">Username</label>
+                    <label class="col-sm-2 control-label">Username</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" name="username" autocomplete="off">
                     </div>
                     <!-- end username -->
                     <div class="form-group form-group-lg">
-                        <label class="col-sm2 control-label">Password</label>
+                        <label class="col-sm-2 control-label">Password</label>
 
                         <div class="col-sm-10">
                             <input type="password" class="form-control" name="password" autocomplete="password">
                         </div>
                         <!-- end pass -->
                         <div class="form-group form-group-lg">
-                            <label class="col-sm2 control-label">Email</label>
+                            <label class="col-sm-2 control-label">Email</label>
                             <div class="col-sm-10">
                                 <input type="email" class="form-control" name="email" autocomplete="off">
                             </div>
                             <!-- end email -->
 
                             <div class="form-group form-group-lg">
-                                <label class="col-sm2 control-label">Fullname</label>
+                                <label class="col-sm-2 control-label">Fullname</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" name="full" autocomplete="off">
                                 </div>
-                                <!-- end fullname -->
+                            </div>
 
-                                <div class="form-group">
-                                    <div class="col-sm-offset-2 col-sm-10">
-                                        <input type="submit" value="Save" class="btn btn-primary">
-                                    </div>
+
+                            <!-- end fullname -->
+                            <div class="form-group form-group-lg">
+                                <label class="col-sm-2 control-label">Avatar</label>
+                                <div class="col-sm-10">
+                                    <input type="file" class="form-control" name="avatar">
                                 </div>
+                            </div>
+                            <!-- end avaatr -->
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <input type="submit" value="Save" class="btn btn-primary">
+                                </div>
+                            </div>
             </form>
 
         </div>
-        ;
+
 <?php   } elseif ($page == 'Insert') {
         echo '<br>';
         echo '<br>';
@@ -251,6 +260,37 @@ if (isset($_SESSION['Username'])) {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo '<br>';
             echo '<br>';
+
+            // تعريف المتغيرات باستخدام $_FILES
+            $avatar = $_FILES['avatar'];
+            print_r($avatar);
+
+            $avatarSize = $avatar['size'];
+            $avatarName = $avatar['name'];
+            $templateName = $avatar['tmp_name']; // اسم الملف المؤق
+            //   $templateName = $_POST['template_name']; // يفترض أنه تم إرساله عبر النموذج باستخدام POST
+            $avatarType = pathinfo($avatar['name'], PATHINFO_EXTENSION);
+
+            // تحديد أنواع الصور التي يمكن رفعها
+            $allowedImageTypes = array("jpg", "jpeg", "png", "gif");
+            $avatarErrors = array();
+            // التحقق من أن الصورة من النوع المسموح به
+            if ($avatarName > 4194304) {
+                echo "image Size is larger than 4 MB ";
+                $avatarErrors[] = 'image Size is larger than 4 MB ';
+                exit;
+            }
+            if (!empty($avatarName) && !in_array($avatarType, $allowedImageTypes)) {
+                echo "نوع الصورة غير مسموح به.";
+                $avatarErrors[] = 'image type not allowed ';
+                exit;
+            }
+            if (empty($avatarErrors)) {
+                $finalAvatar = rand(0, 100000) . '_' . $avatarName;
+                move_uploaded_file($templateName, "uploads\avatars\\" . $finalAvatar);
+            }
+            //end avatar
+
             $username = $_POST['username'];
 
             $email = $_POST['email'];
@@ -268,10 +308,16 @@ if (isset($_SESSION['Username'])) {
                     $msg = '<div class="alert alert-danger">' . 'username  is exists in database   </div>' . '<br>';
                     redirectHome($msg, 'back', 2);
                 } else {
-                    $stmt = $con->prepare("INSERT INTO users(Username,Password,Fullname,Email, RegStatus,Date)
-                    VALUES(:zuser,:zpass,:zfull,:zmail ,1,now())
+                    $stmt = $con->prepare("INSERT INTO users(Username,Password,Fullname,Email, RegStatus,Date,avatar)
+                    VALUES(:zuser,:zpass,:zfull,:zmail ,1,now(),:zavatar)
                     ");
-                    $stmt->execute(array('zuser' => $username, 'zpass' => $password, 'zfull' => $full, 'zmail' => $email));
+                    $stmt->execute(array(
+                        'zuser' => $username,
+                        'zpass' => $password,
+                        'zfull' => $full,
+                        'zmail' => $email,
+                        'zavatar' => $finalAvatar,
+                    ));
                     $count = $stmt->rowCount();
 
                     echo '<br>';

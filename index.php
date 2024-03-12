@@ -18,7 +18,7 @@ include "init.php";
         <div class="panel-body">
             <div class="row">
                 <?php
-                $categories = getAll('categories', 'Id');
+                $categories = getAll('*', 'categories', '', 'Name', 'ASC');
                 foreach ($categories as $category) { ?>
                     <div class="col-sm-6 col-md-3">
                         <div class="thumbnail item-box">
@@ -43,11 +43,11 @@ include "init.php";
         <div class="panel-body">
             <div class="row">
                 <?php
-                $items = getAll('items', 'Item_Id');
+                $items = getAll('*', 'items', 'WHERE Approve = 1', 'Item_Id',);
                 foreach ($items as $item) { ?>
                     <div class="col-sm-6 col-md-3">
                         <div class="thumbnail item-box">
-                            <span class="price-tag"><?php echo $item['Price']; ?></span>
+                            <span class="price-tag">$<?php echo $item['Price']; ?></span>
                             <img class="img-responsive" src="1.jpg" alt="">
                             <div class="caption">
                                 <h3><?php echo '<a href="items.php?itemid=' . $item["Item_Id"] . '">' . $item['Name'] . '</a>'; ?></h3>

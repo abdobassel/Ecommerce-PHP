@@ -139,6 +139,7 @@ if (isset($_SESSION['Username'])) {
                     </div>
                 </div>
                 <!-- end ordering -->
+
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Visible</label>
                     <div class="col-sm-10">
@@ -180,7 +181,9 @@ if (isset($_SESSION['Username'])) {
                         </div>
                     </div>
                 </div>
-                <!-- end allow ads -->
+
+
+
                 <div class="form-group row">
                     <div class="col-sm-10 offset-sm-2">
                         <input type="submit" value="Save" class="btn btn-primary">
