@@ -30,9 +30,10 @@ if (isset($_SESSION['Username'])) {
         <h1 class="text-center">Manage Members</h1>
         <div class="container">
             <div class="table-responsive">
-                <table class="table table-bordered">
+                <table class="table table-bordered manage-members">
                     <tr>
                         <td>#ID</td>
+                        <td>Avatar</td>
                         <td>Username</td>
                         <td>Email</td>
                         <td>Fullname</td>
@@ -43,6 +44,12 @@ if (isset($_SESSION['Username'])) {
                     foreach ($rows as $row) {
                         echo "<tr>";
                         echo "<td>" . $row["UserID"] . "</td>";
+                        if (!empty($row['avatar'])) {
+                            echo "<td><img src='uploads/avatars/" . $row["avatar"] . "'alt=''/></td>";
+                        } else {
+                            echo "<td><img src='deafalt.jpg'/></td>";
+                        }
+
                         echo "<td>" . $row["Username"] . "</td>";
                         echo "<td>" . $row["Email"] . "</td>";
                         echo "<td>" . $row["Fullname"] . "</td>";

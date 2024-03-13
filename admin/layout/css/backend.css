@@ -27,6 +27,17 @@ body {
 
 }
 
+.manage-members img {
+    width: 60px;
+    height: 60px;
+}
+
+.manage-members td {
+    background-color: #FFF;
+    vertical-align: middle;
+
+}
+
 .navbar-nav li a {
     font-size: 18px;
     /* تغيير حجم النص */
