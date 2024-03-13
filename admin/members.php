@@ -270,7 +270,7 @@ if (isset($_SESSION['Username'])) {
 
             // تعريف المتغيرات باستخدام $_FILES
             $avatar = $_FILES['avatar'];
-            print_r($avatar);
+
 
             $avatarSize = $avatar['size'];
             $avatarName = $avatar['name'];

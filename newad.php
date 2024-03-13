@@ -12,6 +12,37 @@ if (isset($_SESSION['user'])) {
     $userInfo = $stmt->fetch();
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // image start 
+        $itemImage = $_FILES['image'];
+
+
+        $itemImageSize = $itemImage['size'];
+        $itemImageName = $itemImage['name'];
+        $templateName = $itemImage['tmp_name']; // اسم الملف المؤق
+        //   $templateName = $_POST['template_name']; // يفترض أنه تم إرساله عبر النموذج باستخدام POST
+        $itemImageType = pathinfo($itemImage['name'], PATHINFO_EXTENSION);
+
+        // تحديد أنواع الصور التي يمكن رفعها
+        $allowedImageTypes = array("jpg", "jpeg", "png");
+        $itemImageErrors = array();
+        // التحقق من أن الصورة من النوع المسموح به
+        if ($itemImageSize > 4194304) {
+
+            $msg = '<div class="alert alert-danger">' . 'image Size is larger than 4 MB  </div>' . '<br>';
+            redirectHome($msg, 'back', 2);
+            $itemImageErrors[] = 'image Size is larger than 4 MB ';
+            exit;
+        }
+        if (!empty($itemImageName) && !in_array($itemImageType, $allowedImageTypes)) {
+            echo "نوع الصورة غير مسموح به.";
+            $itemImageErrors[] = 'image type not allowed ';
+            exit;
+        }
+        if (empty($itemImageErrors)) {
+            $finalitemImage = rand(0, 100000) . '_' . $itemImageName;
+            move_uploaded_file($templateName, "admin/uploads/itemsImages/" . $finalitemImage);
+        }
+        //end image
 
         $name = filter_var($_POST['name'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
@@ -29,8 +60,8 @@ if (isset($_SESSION['user'])) {
             $msg = '<div class="alert alert-danger">' . 'name or price or country made => empty </div>' . '<br>';
             redirectHome($msg, 'back', 2);
         } else {
-            $stmt = $con->prepare("INSERT INTO items(Name, Description,Status,Price, Country_Made,Cat_Id, Mem_ID,Add_Date)
-                    VALUES(:zname,:zdesc,:zstatus,:zprice ,:zmade,:zcat,:zmem, now())
+            $stmt = $con->prepare("INSERT INTO items(Name, Description,Status,Price, Country_Made,Cat_Id, Mem_ID,Add_Date,Image)
+                    VALUES(:zname,:zdesc,:zstatus,:zprice ,:zmade,:zcat,:zmem, now(),:zimg)
                     ");
             $stmt->execute(array(
                 'zname' => $name,
@@ -39,7 +70,8 @@ if (isset($_SESSION['user'])) {
                 'zprice' => $price,
                 'zmade' => $country,
                 'zcat' => $category,
-                'zmem' => $userInfo['UserID'] // UserId for one user only in session;
+                'zmem' => $userInfo['UserID'], // UserId for one user only in session;
+                'zimg' => $finalitemImage,
             ));
             $count = $stmt->rowCount();
             if ($count > 0) {
@@ -56,7 +88,7 @@ if (isset($_SESSION['user'])) {
                 <div class="panel-heading">Create New Ad</div>
 
                 <div class="panel-body">
-                    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+                    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Item Name</label>
                             <div class="col-sm-10">
@@ -86,6 +118,13 @@ if (isset($_SESSION['user'])) {
                             </div>
                         </div>
                         <!-- end Country made item -->
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label">Image</label>
+                            <div class="col-sm-10">
+                                <input type="file" class="form-control" name="image">
+                            </div>
+                        </div>
+                        <!-- end image item -->
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Status</label>
                             <div class="col-sm-10">
@@ -160,7 +199,14 @@ if (isset($_SESSION['user'])) {
                                         <span class="price-tag"><?php
                                                                 echo  $item['Price'];
                                                                 ?></span>
-                                        <img class="img-responsive" src="1.jpg" alt="">
+                                        <?php
+                                        if (!empty($item['Image'])) {
+                                            echo "<img class='img-responsive' src='./admin/uploads/itemsImages/" . $item["Image"] . "'alt=''/>";
+                                        } else {
+                                            echo "<img class='img-responsive' src='1.jpg' alt=''>";
+                                        }
+                                        ?>
+
                                         <div class="caption">
                                             <h3><?php echo
                                                 '<a href="items.php?itemid=' . $item["Item_Id"] . '">' . $item['Name'] . '</a>';

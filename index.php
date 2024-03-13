@@ -48,7 +48,13 @@ include "init.php";
                     <div class="col-sm-6 col-md-3">
                         <div class="thumbnail item-box">
                             <span class="price-tag">$<?php echo $item['Price']; ?></span>
-                            <img class="img-responsive" src="1.jpg" alt="">
+                            <?php
+                            if (!empty($item['Image'])) {
+                                echo "<img class='img-responsive' src='./admin/uploads/itemsImages/" . $item["Image"] . "'alt=''/>";
+                            } else {
+                                echo "<img class='img-responsive' src='1.jpg' alt=''>";
+                            }
+                            ?>
                             <div class="caption">
                                 <h3><?php echo '<a href="items.php?itemid=' . $item["Item_Id"] . '">' . $item['Name'] . '</a>'; ?></h3>
                                 <p><?php echo $item['Description']; ?></p>

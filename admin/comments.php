@@ -36,7 +36,7 @@ if (isset($_SESSION['Username'])) {
         <h1 class="text-center">Manage Comments</h1>
         <div class="container">
             <div class="table-responsive">
-                <table class="table table-bordered">
+                <table class="table table-bordered manage-members">
                     <tr>
                         <td>#ID</td>
                         <td>Comment</td>

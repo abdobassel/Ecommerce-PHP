@@ -25,7 +25,13 @@ $items = getItems($cat_id);
                         <span class="price-tag"><?php
                                                 echo  $item['Price'];
                                                 ?></span>
-                        <img class="img-responsive" src="1.jpg" alt="">
+                        <?php
+                        if (!empty($item['Image'])) {
+                            echo "<img class='img-responsive' src='./admin/uploads/itemsImages/" . $item["Image"] . "'alt=''/>";
+                        } else {
+                            echo "<img class='img-responsive' src='1.jpg' alt=''>";
+                        }
+                        ?>
                         <div class="caption">
                             <h3><?php echo
                                 '<a href="items.php?itemid=' . $item["Item_Id"] . '">' . $item['Name'] . '</a>';

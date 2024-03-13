@@ -35,7 +35,7 @@
                             <li><a href="newad.php">New Ad</a></li>
                         </ul>
                     </li>
-                    <li><a href="index.php#all-categories pull-left">All Categories</a></li>
+                    <li><a href="index.php#all-categories">All Categories</a></li>
                 <?php else : ?>
                     <li><a href="login.php"><span class="pull-right">Login | Sign Up</span></a></li>
                 <?php endif; ?>
